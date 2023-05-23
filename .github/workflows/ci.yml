@@ -1,19 +1,14 @@
-on: [push]
+name: Docker Image for Backend
+
+on: 
+  push:
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     name: build a docker image for server
     steps:
-      # To use this repository's private action,
-      # you must check out the repository
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Server action step
-        uses: ./ # Uses an action in the root directory
-        id: server
-        with:
-          who-to-greet: 'Sergey Yakovlev'
-      # Use the output from the `hello` step
-      - name: Get the output time
-        run: echo "The time was ${{ steps.server.outputs.time }}"
+      - uses: actions/checkout@v2
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag "${GITHUB_REF#refs/heads/}.${GITHUB_SHA}"
