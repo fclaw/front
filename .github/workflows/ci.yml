@@ -1,47 +1,19 @@
-name: CI
-
-on:
-  push:
-    branches: [master]
-  pull_request:
+on: [push]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    name: build a docker image for server
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Set up Node toolchain
-        uses: actions/setup-node@v1
+      # To use this repository's private action,
+      # you must check out the repository
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Server action step
+        uses: ./ # Uses an action in the root directory
+        id: server
         with:
-          node-version: "12.x"
-
-      - name: Cache PureScript dependencies
-        uses: actions/cache@v2
-        with:
-          key: ${{ runner.os }}-spago-${{ hashFiles('**/*.dhall') }}
-          path: |
-            .spago
-            output
-
-      - name: Cache NPM dependencies
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-node-modules
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-
-      - name: Install NPM dependencies
-        run: npm install
-
-      - name: Build the project
-        run: npm run build
-
-      - name: Run the tests
-        run: npm run test
+          who-to-greet: 'Sergey Yakovlev'
+      # Use the output from the `hello` step
+      - name: Get the output time
+        run: echo "The time was ${{ steps.server.outputs.time }}"
