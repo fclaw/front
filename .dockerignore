@@ -1,0 +1,9 @@
+*
+!deploy
+!dev
+!src
+!test
+!package.json
+!*.dhall
+!shell.nix
+!*.mjs
