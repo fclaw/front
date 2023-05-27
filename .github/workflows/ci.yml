@@ -32,7 +32,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
            images: |
-              name/app
+              sclaw/front
            tags: |
               type=raw, value=${GITHUB_REF#refs/heads/}:${GITHUB_SHA}
             
