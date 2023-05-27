@@ -27,7 +27,7 @@ RUN touch .bash_profile && deploy/nix.sh
 ENV PATH="/home/nix/bin:${PATH}"
 
 RUN . /home/nix/.nix-profile/etc/profile.d/nix.sh && \
-     nix-shell --command "npm install && purs-tidy format-in-place \"src/**/*.purs\" && npm run bundle"
+     nix-shell --command "npm install && purs-tidy format-in-place \"src/**/*.purs\" && npm run generate_api && npm run bundle"
 
 FROM ${node_image}
 
