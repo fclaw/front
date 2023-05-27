@@ -30,9 +30,6 @@ jobs:
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v4
-        env:
-          BRANCH: ${{ ${{ github.event.pull_request.head.sha }} }}
-          SHA: $GITHUB_SHA
         with:
            images: |
               sclaw/front
