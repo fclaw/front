@@ -22,11 +22,9 @@ jobs:
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v4
-        env: 
-          REPO: ${{ env.DOCKER_REPO }}
         with:
            images: |
-              REPO
+            ${{ env.DOCKER_REPO }}
            tags: |
               type=raw,type=raw,value=main_${{ github.sha }},enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
             
