@@ -26,7 +26,7 @@ ENV PATH="/home/nix/bin:${PATH}"
 
 RUN . /home/nix/.nix-profile/etc/profile.d/nix.sh && \
      nix-shell --command "npm install && purs-tidy format-in-place \"src/**/*.purs\" && npm run generate_api && npm run bundle" && \
-     nix-env -iA nodejs
+     nix-env -i nodejs
 
 RUN nodejs --version
 
