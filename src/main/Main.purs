@@ -1,6 +1,6 @@
 module Main (main) where
 
-import Prelude (Unit, bind, ($), void, when, (/=), pure, discard)
+import Prelude (Unit, bind, ($), void, when, (/=), pure, discard, (>>=))
 
 import App.Data.Route (routeCodec)
 import App.Component.Router as Router
@@ -13,7 +13,7 @@ import Halogen.Aff as HA
 import Halogen.VDom.Driver (runUI)
 import Undefined (undefined)
 import Data.Maybe
-import Effect.Aff (launchAff_)
+import Effect.Aff (launchAff_, Aff)
 import Halogen (liftEffect)
 import Halogen as H
 import Halogen.Aff as HA
@@ -43,7 +43,7 @@ main config =
     -- First, we'll use `readToken` to read an authentication token out of local
     -- storage. If we can read one, we'll use it to try and get a new user (which
     -- will fail if the token isn't valid).
-    currentUser :: Maybe P.Profile <- liftEffect loadUser
+    currentUser :: Maybe P.Profile <- liftEffect S.readToken >>= loadUser
 
     -- We now have the three pieces of information necessary to configure our app. Let's create
     -- a record that matches the `Store` type our application requires by filling in these three
@@ -95,5 +95,5 @@ main config =
       when (old /= Just new) $ launchAff_ $ void $ halogenIO.query $ H.mkTell $ Router.Navigate new
 
 
-loadUser :: Effect (Maybe P.Profile)
-loadUser = pure Nothing
+loadUser :: Maybe S.Token -> Aff (Maybe P.Profile)
+loadUser _ = pure Nothing

@@ -25,9 +25,6 @@ RUN touch .bash_profile && deploy/nix.sh
 ENV PATH="/home/nix/bin:${PATH}"
 
 RUN . /home/nix/.nix-profile/etc/profile.d/nix.sh && \
-     nix-shell --command "npm install && purs-tidy format-in-place \"src/**/*.purs\" && npm run generate_api && npm run bundle" && \
-     nix-env -i nodejs
-
-RUN RUN . /home/nix/.nix-profile/etc/profile.d/nix.sh && nix-shell --command "node --version"
-
+     nix-shell --command "npm install && purs-tidy format-in-place \"src/**/*.purs\" && npm run generate_api && npm run bundle"
+     
 ENTRYPOINT ["/app/deploy/init.sh"]
