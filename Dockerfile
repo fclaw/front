@@ -6,8 +6,7 @@ FROM ${build_image} as build
 RUN apt update && \
     apt install -y curl && \
     apt install -y tar && \
-    apt install -y xz-utils && \
-    apt install -y wait-for-it
+    apt install -y xz-utils
 
 RUN addgroup --system nixbld && \
     adduser --home /home/nix --disabled-password --gecos "" --shell /bin/bash nix && \
