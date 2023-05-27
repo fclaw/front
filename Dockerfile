@@ -34,9 +34,9 @@ FROM ${node_image}
 
 WORKDIR app
 
-COPY --from=build $HOME/index.js .
-COPY --from=build $HOME/dist .
-COPY --from=build $HOME/deploy .
+COPY --from=build /home/nix/index.js /app
+COPY --from=build /home/nix/dist /app
+COPY --from=build /home/nix/deploy /app
 
 RUN echo $PATH
 
