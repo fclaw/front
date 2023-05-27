@@ -3,10 +3,6 @@ name: Docker Image for Frontend
 on: 
   push:
     branches: [ main ]
-  workflow_dispatch:   
-env:
-  mascot: ${{ env.DOCKER_IMAGE }} 
-    # super_duper_var: totally_awesome    
 
 jobs:
 
@@ -28,7 +24,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         env: 
-          IMAGE: ${{ env.DOCKER_IMAGE }} 
+          IMAGE: ${{ vars.DOCKER_IMAGE }} 
         with:
            images: |
               $IMAGE
