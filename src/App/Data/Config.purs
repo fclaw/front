@@ -2,6 +2,7 @@ module App.Data.Config
   ( Config(..)
   , Host(..)
   , LogLevel(..)
+  , WSUrl(..)
   , logLevelToString
   )
   where
@@ -33,6 +34,20 @@ instance decodeHost :: DecodeJson Host where
 
 instance encodeHost :: EncodeJson Host where
   encodeJson = encodeJson <<< unwrap
+
+newtype WSUrl = WSUrl String 
+
+derive instance newtypWSUrl :: Newtype WSUrl _
+
+instance decodeWSUrl :: DecodeJson WSUrl where
+  decodeJson json = do 
+    obj <- decodeJson json
+    val <- obj `getField` "wsUrl"
+    pure $ wrap val
+
+instance encodeWSUrl :: EncodeJson WSUrl where
+  encodeJson = encodeJson <<< unwrap
+
 
 -- | Let's start with some types necessary for the rest of the module. We're
 -- | going to store a logging level in our store, so we'll define it quickly;
@@ -74,7 +89,7 @@ type Config =
   , telegramChat :: String
   , telegramHost :: String
   , build :: String
-  , wsUrl :: String
+  , wsUrl :: WSUrl
   }
 
 configToJson :: Config -> Json

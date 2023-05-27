@@ -32,16 +32,16 @@ import Data.Maybe
 import Effect.Exception (Error)
 import Data.Foldable (for_)
 import Effect.Class (class MonadEffect)
-
 import Effect.Console
+import App.Data.Config
 
-import Undefined
 
-component :: forall q o m i. MonadAff m => H.Component q i o m
+data ParentAction = GetState
+
 component =
   H.mkComponent
     { initialState: identity
-    , render: const $ HH.div [ css "center" ] [ HH.slot_ (Proxy :: Proxy "systemInfo") 0 systemInfo { msg: mempty } ]
+    , render: const $ HH.div [ css "center" ] [ HH.slot_ (Proxy :: Proxy "systemInfo") 0 systemInfo { msg: (mempty :: String) } ]
     , eval: H.mkEval H.defaultEval
     }
 
@@ -49,10 +49,9 @@ data Action = Initialize | Recieve String
 
 type State = { msg :: String }
 
-systemInfo :: forall q o m. MonadAff m => H.Component q State o m
 systemInfo = 
   H.mkComponent
-    { initialState: const { msg: mempty }
+    { initialState: const { msg: (mempty :: String) }
     , render: \{ msg } -> 
          HH.div 
          [css "child"] 
@@ -63,12 +62,14 @@ systemInfo =
       }
     }
   where
-    handleAction Initialize =
-      void $ H.subscribe =<< getMsg Recieve
-    handleAction (Recieve new) = H.modify_ \s ->  s { msg = new } 
+    handleAction Initialize = do 
+      { config: { wsUrl } } <- getStore
+      void $ H.subscribe =<< getMsg wsUrl Recieve
+    handleAction (Recieve new) =
+      H.modify_ \s ->  s { msg = new } 
 
-getMsg :: forall m a b c . Bind m => MonadEffect m => MonadAff m => MonadRec m => (a -> b) -> m (HS.Emitter b)
-getMsg go = do 
+getMsg :: forall m a b c . Bind m => MonadEffect m => MonadAff m => MonadRec m => WSUrl -> (a -> b) -> m (HS.Emitter b)
+getMsg _ go = do 
  { emitter, listener } <- H.liftEffect HS.create
  ws <- H.liftEffect $ runFn2 WS.createWebSocket "ws://127.0.1:12000/api/public/server/info" []
  let isOpen = do 
