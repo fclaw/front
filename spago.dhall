@@ -47,6 +47,7 @@
   , "enums"
   , "partial"
   , "refs"
+  , "control"
   ]
 , packages = ./packages.dhall
 , sources = [ "src/**/*.purs", "test/**/*.purs" ]

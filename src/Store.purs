@@ -22,7 +22,10 @@ import Web.HTML (window)
 import Web.HTML.Window (localStorage)
 import Web.Storage.Storage (getItem, removeItem, setItem)
 import Effect (Effect)
-import App.Data.Credentials (Credentials (..))
+import App.Data.Credentials
+import Data.Newtype
+import Data.Either
+import Control.Alternative ((<|>))
 
 -- | We can now construct our central state which will be available to all
 -- | components (if they opt-in).
@@ -66,20 +69,33 @@ newtype Token = Token Credentials
 -- | The following functions deal with writing, reading, and deleting tokens in local storage at a
 -- | particular key. They'll be used as part of our production monad, `Conduit.AppM`.
 
-tokenKey = "token" :: String
+tokenKeyBasic = "basic" :: String
+tokenKeyJWT = "kwt" :: String
 
 readToken :: Effect (Maybe Token)
 readToken = do
   w <- window
   st <- localStorage w
-  str <- getItem tokenKey st
-  pure $ map (Token <<< Credentials) str
+  basic <- getItem tokenKeyBasic st
+  jwt <- getItem tokenKeyJWT st
+  pure $ map (Token <<< Credentials) $ (map (Left <<< wrap) basic) <|> (map (Right <<< wrap) jwt)
+
+
+type Tpl = { tokenKey :: String, token :: String }
 
 writeToken :: Token -> Effect Unit
-writeToken (Token (Credentials str)) = do
+writeToken (Token (Credentials cred)) = do
   w <- window
   st <- localStorage w
-  setItem tokenKey str st
+  let { tokenKey, token } = 
+       case cred of
+         Right token -> { tokenKey: "jwt", token: unwrap token } 
+         Left token -> { tokenKey: "basic", token: unwrap token }
+  setItem tokenKey token st
 
 removeToken :: Effect Unit
-removeToken = removeItem tokenKey =<< localStorage =<< window
+removeToken = do
+  w <- window
+  st <- localStorage w 
+  tokenKeyBasic `removeItem` st
+  tokenKeyJWT `removeItem` st
