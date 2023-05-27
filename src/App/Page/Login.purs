@@ -36,7 +36,9 @@ import Foreign.Object (Object, keys)
 import Data.Either
 import Data.String (length)
 import Store (writeToken, Token (..))
-
+import Effect.Aff.Class (class MonadAff)
+import Halogen.Store.Monad (class MonadStore)
+import Effect.Class (class MonadEffect)
 
 import Effect.Class.Console
 
@@ -58,7 +60,7 @@ component = H.mkComponent
     }
   where
   handleAction Submit = do
-    { config: { url } } <- getStore 
+    { config: { url } } <- getStore
     { email, password, redirect: Intake { redirect } } <- H.get
     let mkTpl = do  
           fst <- email

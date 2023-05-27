@@ -5,5 +5,6 @@
     "telegramBot": "bot2096396660:AAFgPJkIGmBOgbWuzvyejPJJo7-HpFgr2CY",
     "telegramChat": "-934720023",
     "telegramHost": "https://api.telegram.org/",
-    "build": "a683fa7289615a2e768d3fe7a80de6fd923d696d4c57989e4dd7a02edd81e53a" 
+    "build": "a683fa7289615a2e768d3fe7a80de6fd923d696d4c57989e4dd7a02edd81e53a",
+    "wsUrl": "ws://127.0.1:12000"
 }

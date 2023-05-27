@@ -44,3 +44,5 @@ function (build, msg)
       return log; 
     }
 }
+
+export const getDataFromResponse = json => () => { e.Response.validateJSON(json); return e.Response.constructFromObject(json).getSuccess(); }

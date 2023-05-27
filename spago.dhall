@@ -39,6 +39,14 @@
   , "web-storage"
   , "strings"
   , "web-html"
+  , "halogen-subscriptions"
+  , "tailrec"
+  , "monad-loops"
+  , "web-file"
+  , "unsafe-coerce"
+  , "enums"
+  , "partial"
+  , "refs"
   ]
 , packages = ./packages.dhall
 , sources = [ "src/**/*.purs", "test/**/*.purs" ]

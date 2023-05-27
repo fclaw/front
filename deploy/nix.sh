@@ -22,8 +22,6 @@ require_util() {
         oops "you do not have '$1' installed, which I need to $2"
 }
 
-echo "$(uname -s).$(uname -m)"
-
 case "$(uname -s).$(uname -m)" in
     Linux.x86_64) system=x86_64-linux; hash=afa6bf82bacb18ec0d6a1fd992b718192f895023d6cea8b94b2fb35fce352ff5;;
     Linux.aarch64) system=aarch64-linux; hash=dfbbaa86404c3efe74d87c8d4c39081affc673c8b5f64cfefc4ab0eaf84ed39b;;

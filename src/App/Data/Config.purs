@@ -74,6 +74,7 @@ type Config =
   , telegramChat :: String
   , telegramHost :: String
   , build :: String
+  , wsUrl :: String
   }
 
 configToJson :: Config -> Json

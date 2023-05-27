@@ -25,6 +25,8 @@ import Control.Monad.Trans.Class (lift)
 import Data.Either (Either(..))
 import Data.Maybe (Maybe(..))
 import Halogen (HalogenM)
+import Effect (Effect)
+import Undefined
 
 -- | We require a strict format for the messages that we log so that we can search this structured
 -- | data from our logging service later on. We can enforce this with the type system by using the
@@ -37,6 +39,9 @@ class Monad m <= LogMessages m where
 -- | This instance lets us avoid having to use `lift` when we use these functions in a component.
 instance logMessagesHalogenM :: LogMessages m => LogMessages (HalogenM st act slots msg m) where
   logMessage = lift <<< logMessage
+
+instance logMessagesEffect :: LogMessages Effect where
+  logMessage = undefined
 
 -- | Next, we'll provide a few helper functions to help users easily create and dispatch logs
 -- | from anywhere in the application. Each helper composes a couple of small functions together

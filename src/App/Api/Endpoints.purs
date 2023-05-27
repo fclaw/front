@@ -14,7 +14,7 @@ import Foreign.Object (Object)
 foreign import data ApiClient :: Type
 foreign import data UserApi :: Type
 foreign import data FrontApi :: Type
-foreign import data Response :: Type
+foreign import data Response :: Type -> Type
 foreign import data RequestFrontendLog :: Type
 
 foreign import mkApiClient :: Fn2 Host (Maybe Credentials) (Effect ApiClient)
@@ -31,6 +31,7 @@ foreign import getCredentialsBasicAuth :: Fn1 (Object ResponseBasicAuth) Credent
 foreign import mkFrontApi :: Fn1 ApiClient (Effect FrontApi)
 
 
-foreign import putFrontendLog :: Fn2 RequestFrontendLog FrontApi (AC.EffectFnAff (Object Response))
+foreign import putFrontendLog :: forall a .  Fn2 RequestFrontendLog FrontApi (AC.EffectFnAff (Object (Response a)))
 foreign import constructFrontendLog :: Fn2 String String (Effect RequestFrontendLog)
 
+foreign import getDataFromResponse :: forall a . Fn1 (Object (Response a)) (Effect a)

@@ -11,6 +11,8 @@ import Control.Monad.Trans.Class (lift)
 import Data.DateTime (Date, DateTime, Time)
 import Data.DateTime.Instant (Instant)
 import Halogen (HalogenM)
+import Effect (Effect)
+import Undefined
 
 -- | This class may seem trivial as these are all functions available from the  `purescript-now`
 -- | package. But by making a capability we can freely swap out implementations without breaking
@@ -30,3 +32,9 @@ instance nowHalogenM :: Now m => Now (HalogenM st act slots msg m) where
   nowDate = lift nowDate
   nowTime = lift nowTime
   nowDateTime = lift nowDateTime
+
+instance nowEffect :: Now Effect where
+    now = undefined
+    nowDate = undefined
+    nowTime = undefined
+    nowDateTime = undefined
