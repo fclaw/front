@@ -6,17 +6,6 @@ on:
 
 jobs:
 
-  greeting_job:
-    runs-on: ubuntu-latest
-    env:
-      Greeting: Hello
-    steps:
-      - name: "Say Hello Mona it's Monday"
-        if: ${{ env.DOCKER_REPO == 'sclaw/front' }}
-        run: echo "$Greeting $First_Name. Today is $DOCKER_REPO!"
-        env:
-          First_Name: Mona
-
   push_to_registry:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
@@ -33,9 +22,11 @@ jobs:
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v4
+        env:
+          DOCKER_REPO: ${{ env.DOCKER_REPO }}
         with:
            images: |
-            ${{ env.DOCKER_REPO }}
+            $DOCKER_REPO
            tags: |
               type=raw,type=raw,value=main_${{ github.sha }},enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
             
