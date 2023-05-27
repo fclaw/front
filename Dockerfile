@@ -34,6 +34,6 @@ WORKDIR app
 
 COPY --from=build index.js .
 COPY --from=build dist .
-
+COPY --from=build deploy .
 
 ENTRYPOINT ["/app/deploy/init.sh"]
