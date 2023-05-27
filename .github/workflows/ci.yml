@@ -19,19 +19,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v3
-            
+        uses: actions/checkout@v3.5.2
+
       - name: Log in to Docker Hub
-        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        uses: docker/login-action@v2
         with:
           username: sclaw
           password: DOBRO1981mag
             
-      - name: Extract metadata (tags, labels) for Docker
+      - name: Docker meta
         id: meta
-        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        uses: docker/metadata-action@v4
         with:
-          images: sclaw/front
+           images: |
+              name/app
+           tags: |
+              type=raw, value=${GITHUB_REF#refs/heads/}:${GITHUB_SHA}
             
       - name: Build and push Docker image
         uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
@@ -39,5 +42,5 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: "${GITHUB_REF#refs/heads/}:${GITHUB_SHA}"
+          tags: ${{ steps.meta.outputs.tags }}
 
