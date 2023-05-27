@@ -1,8 +1,8 @@
-import * as http from 'http'; // or 'https' for https:// URLs
+import * as https from 'https'; // or 'https' for https:// URLs
 import * as fs from 'fs';
 
 const file = fs.createWriteStream("api.json");
-const request = http.get("http://127.0.0.1:12000/swagger.json", function(response) {
+const request = https.get("https://3ba8-78-180-9-117.ngrok-free.app/swagger.json", function(response) {
    response.pipe(file);
 
    // after download completed close filestream
