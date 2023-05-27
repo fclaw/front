@@ -38,6 +38,6 @@ COPY --from=build /home/nix/index.js /app
 COPY --from=build /home/nix/dist /app
 COPY --from=build /home/nix/deploy /app
 
-RUN echo $PATH
+RUN ls -la $HOME
 
 ENTRYPOINT ["/app/deploy/init.sh"]
