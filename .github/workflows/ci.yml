@@ -3,22 +3,16 @@ name: Docker Image for Frontend
 on: 
   push:
     branches: [ main ]
-  workflow_dispatch:
-      inputs:
-        environment:
-          type: choice
-          description: Select the environment
-          required: true
-          options:
-            - TEST
-            - UAT  
- 
+  workflow_dispatch:   
+env:
+  mascot: ${{ env.DOCKER_IMAGE }} 
+    # super_duper_var: totally_awesome    
 
 jobs:
 
   push_to_registry:
     name: Push Docker image to Docker Hub
-    environment: ${{ github.event.inputs.environment }}
+    environment: CI
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
