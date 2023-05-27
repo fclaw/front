@@ -23,6 +23,7 @@ import AppM as AppM
 import Data.Unit
 import Routing.Hash (matchesWith)
 import Routing.Duplex (parse)
+import Data.Traversable (for)
 
 import Effect.Console
 
@@ -96,4 +97,4 @@ main config =
 
 
 loadUser :: Maybe S.Token -> Aff (Maybe P.Profile)
-loadUser _ = pure Nothing
+loadUser token = for token \(_ :: S.Token) -> undefined
