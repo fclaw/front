@@ -34,8 +34,8 @@ FROM ${node_image}
 
 WORKDIR app
 
-COPY --from=build $HOME/index.js .
-COPY --from=build $HOME/dist .
-COPY --from=build $HOME/deploy .
+COPY --from=build . .
+
+RUN echo $PATH
 
 ENTRYPOINT ["/app/deploy/init.sh"]
