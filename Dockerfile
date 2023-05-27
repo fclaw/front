@@ -1,5 +1,4 @@
 ARG build_image=ubuntu
-ARG node_image=node:18.16.0-alpine
 
 FROM ${build_image} as build
 
@@ -26,18 +25,4 @@ RUN touch .bash_profile && deploy/nix.sh
 ENV PATH="/home/nix/bin:${PATH}"
 
 RUN . /home/nix/.nix-profile/etc/profile.d/nix.sh && \
-     nix-shell --command "npm install && purs-tidy format-in-place \"src/**/*.purs\" && npm run generate_api && npm run bundle"
-
-RUN echo $HOME
-
-FROM ${node_image}
-
-WORKDIR app
-
-COPY --from=build /home/nix/index.js /app
-COPY --from=build /home/nix/dist /app
-COPY --from=build /home/nix/deploy /app
-
-RUN ls -la $HOME
-
-ENTRYPOINT ["/app/deploy/init.sh"]
+     nix-shell --command "npm install && purs-tidy format-in-place \"src/**/*.purs\" && npm run generate_api && npm run bundle && npm run serve"
