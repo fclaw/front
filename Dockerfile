@@ -28,6 +28,6 @@ RUN . /home/nix/.nix-profile/etc/profile.d/nix.sh && \
      nix-shell --command "npm install && purs-tidy format-in-place \"src/**/*.purs\" && npm run generate_api && npm run bundle" && \
      nix-env -i nodejs
 
-RUN node --version
+RUN RUN . /home/nix/.nix-profile/etc/profile.d/nix.sh && nix-shell --command "node --version"
 
 ENTRYPOINT ["/app/deploy/init.sh"]
