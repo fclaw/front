@@ -30,7 +30,5 @@ const server = http.createServer((req, res) => {
   })
 
   // Forward the body of the request to esbuild
-  dsreq.pipe(proxyReq, { end: true });
-});
-
-server.listen(3000);
+  req.pipe(proxyReq, { end: true });
+}).listen(3000);
