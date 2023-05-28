@@ -34,8 +34,8 @@ RUN nix-channel --update
 
 WORKDIR app
 
-COPY --from=build /home/nix/deploy /app
-COPY --from=build /home/nix/dist /app
+COPY --from=build /home/nix/deploy /app/deploy
+COPY --from=build /home/nix/dist /app/dist
 COPY --from=build /home/nix/index.js /app
 COPY --from=build /home/nix/shell.nix /app
 COPY --from=build /home/nix/config.json /app
