@@ -28,7 +28,7 @@ RUN . /home/nix/.nix-profile/etc/profile.d/nix.sh && \
      nix-shell --command "npm install && purs-tidy format-in-place \"src/**/*.purs\" && npm run generate_api && npm run bundle"
      
 
-FROM nixos/nix as run
+FROM nixos/nix:latest-amd64 as run
 
 WORKDIR app
 
