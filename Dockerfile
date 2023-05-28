@@ -25,13 +25,13 @@ RUN touch .bash_profile && deploy/nix.sh
 ENV PATH="/home/nix/bin:${PATH}"
 
 RUN . /home/nix/.nix-profile/etc/profile.d/nix.sh && \
+     nix-env -i purescript && \
      nix-shell dev.nix --command "npm install && purs-tidy format-in-place \"src/**/*.purs\" && npm run generate_api && npm run bundle"
      
 
 FROM nixos/nix:latest-amd64 as run
 
 RUN nix-channel --update
-RUN nix-env -i purescript
 
 WORKDIR app
 
@@ -42,5 +42,6 @@ COPY --from=build /home/nix/prod.nix /app
 COPY --from=build /home/nix/config.json /app
 COPY --from=build /home/nix/*.mjs /app
 COPY --from=build /home/nix/package.json /app
+COPY --from=build /home/nix/node_modules /app/node_modules
 
 ENTRYPOINT ["/app/init.sh"]
