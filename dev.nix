@@ -5,12 +5,12 @@ let
    python = pkgs.python;
    git = pkgs.git;
    jdk = pkgs.jdk;
+   ps = pkgs.purescript;
 in
 pkgs.mkShell { 
-  buildInputs = [ git nodejs jdk ];
+  buildInputs = [ git nodejs jdk ps ];
   shellHook = ''
     npm install --save-exact esbuild
-    npm install purs-tidy
     npm install @openapitools/openapi-generator-cli -D
     npm install querystring
     npm install superagent

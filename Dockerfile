@@ -31,6 +31,7 @@ RUN . /home/nix/.nix-profile/etc/profile.d/nix.sh && \
 FROM nixos/nix:latest-amd64 as run
 
 RUN nix-channel --update
+RUN nix-env -i purescript
 
 WORKDIR app
 
