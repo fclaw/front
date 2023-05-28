@@ -4,4 +4,8 @@ let
 in
 pkgs.mkShell { 
   buildInputs = [ nodejs ];
+  shellHook = ''
+    npm install --save-exact esbuild
+    export PATH="./node_modules/.bin:$PATH"
+   '';
   }
