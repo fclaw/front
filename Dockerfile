@@ -27,4 +27,17 @@ ENV PATH="/home/nix/bin:${PATH}"
 RUN . /home/nix/.nix-profile/etc/profile.d/nix.sh && \
      nix-shell --command "npm install && purs-tidy format-in-place \"src/**/*.purs\" && npm run generate_api && npm run bundle"
      
-ENTRYPOINT ["/home/nix/deploy/init.sh"]
+
+FROM nixos/nix as run
+
+WORKDIR app
+
+COPY --from=buuild /home/nix/deploy /app
+COPY --from=buuild /home/nix/dist /app
+COPY --from=buuild /home/nix/index.js /app
+COPY --from=buuild /home/nix/shell.nix /app
+COPY --from=buuild /home/nix/config.json /app
+COPY --from=buuild /home/nix/*.mjs /app
+
+
+ENTRYPOINT ["/app/deploy/init.sh"]
