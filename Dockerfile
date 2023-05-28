@@ -31,6 +31,8 @@ RUN . /home/nix/.nix-profile/etc/profile.d/nix.sh && \
 
 FROM nixos/nix:latest-amd64 as run
 
+EXPOSE 8080/tcp
+
 RUN nix-channel --update
 
 WORKDIR app
