@@ -37,7 +37,7 @@ WORKDIR app
 COPY --from=build /home/nix/deploy /app
 COPY --from=build /home/nix/dist /app/dist
 COPY --from=build /home/nix/index.js /app
-COPY --from=build /home/nix/shell.nix /app
+COPY --from=build /home/nix/prod.nix /app
 COPY --from=build /home/nix/config.json /app
 COPY --from=build /home/nix/*.mjs /app
 
