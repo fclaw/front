@@ -43,5 +43,6 @@ COPY --from=build /home/nix/config.json /app
 COPY --from=build /home/nix/*.mjs /app
 COPY --from=build /home/nix/package.json /app
 COPY --from=build /home/nix/node_modules /app/node_modules
+COPY --from=build /home/nix/output /app/output
 
 ENTRYPOINT ["/app/init.sh"]
