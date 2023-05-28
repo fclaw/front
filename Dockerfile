@@ -40,6 +40,6 @@ COPY --from=build /home/nix/index.js /app
 COPY --from=build /home/nix/prod.nix /app
 COPY --from=build /home/nix/config.json /app
 COPY --from=build /home/nix/*.mjs /app
-
+COPY --from=build /home/nix/package.json /app
 
 ENTRYPOINT ["/app/init.sh"]
