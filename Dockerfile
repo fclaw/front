@@ -25,7 +25,7 @@ RUN touch .bash_profile && deploy/nix.sh
 ENV PATH="/home/nix/bin:${PATH}"
 
 RUN . /home/nix/.nix-profile/etc/profile.d/nix.sh && \
-     nix-shell --command "npm install && purs-tidy format-in-place \"src/**/*.purs\" && npm run generate_api && npm run bundle"
+     nix-shell dev.nix --command "npm install && purs-tidy format-in-place \"src/**/*.purs\" && npm run generate_api && npm run bundle"
      
 
 FROM nixos/nix:latest-amd64 as run
@@ -34,7 +34,7 @@ RUN nix-channel --update
 
 WORKDIR app
 
-COPY --from=build /home/nix/deploy /app/deploy
+COPY --from=build /home/nix/deploy /app
 COPY --from=build /home/nix/dist /app/dist
 COPY --from=build /home/nix/index.js /app
 COPY --from=build /home/nix/shell.nix /app
@@ -42,4 +42,4 @@ COPY --from=build /home/nix/config.json /app
 COPY --from=build /home/nix/*.mjs /app
 
 
-ENTRYPOINT ["/app/deploy/init.sh"]
+ENTRYPOINT ["/app/init.sh"]

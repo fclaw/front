@@ -10,4 +10,4 @@
 !config.json
 !dist
 !index.js
-!shell.nix
+!prod.nix
