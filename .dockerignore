@@ -5,7 +5,7 @@
 !test
 !package.json
 !*.dhall
-!shell.nix
+!*.nix
 !*.mjs
 !config.json
 !dist
