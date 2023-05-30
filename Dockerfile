@@ -73,7 +73,7 @@ WORKDIR /build
 
 COPY . .
 
-RUN nix-env -i nixpkgs.purescript && nix-shell dev.nix --command "npm install && purs-tidy format-in-place \"src/**/*.purs\" && npm run generate_api && npm run bundle"
+RUN nix-env -iA nixpkgs.purescript && nix-shell dev.nix --command "npm install && purs-tidy format-in-place \"src/**/*.purs\" && npm run generate_api && npm run bundle"
 
 FROM nix-builder as main
 
