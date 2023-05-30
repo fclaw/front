@@ -1,4 +1,4 @@
-FROM alpine as fetcher
+FROM --platform=amd64 alpine as fetcher
 
 # Enable HTTPS support in wget.
 RUN apk add --no-cache openssl ca-certificates
@@ -79,10 +79,9 @@ RUN nix-channel --add \
     
 RUN  nix-env -iA nixpkgs.which && nix-env -iA nixpkgs.purescript && nix-env -iA nixpkgs.nodejs-18_x
 
-RUN cp $(which purs) ./deploy/purescript-0.15.9
+RUN cp $(which purs) ./deploy/purescript-0.15.9 && mv ./deploy/purescript-0.15.9/purs ./deploy/purescript-0.15.9/purs.bin 
 
 RUN ls -la ./deploy/purescript-0.15.9
-
 
 RUN npm install
 
