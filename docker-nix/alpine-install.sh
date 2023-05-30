@@ -32,4 +32,4 @@ done
 
 mkdir -m 0755 /nix
 
-USER=root sh nix-*-x86_64-linux/install
+USER=root sh nix-*-$system/install

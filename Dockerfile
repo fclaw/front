@@ -1,7 +1,9 @@
 FROM arm64v8/alpine as fetcher
 
+
 # Enable HTTPS support in wget.
-RUN apk add --no-cache openssl ca-certificates
+# RUN apk add --no-cache openssl ca-certificates
+
 
 # Install it in busybox for a start
 COPY ./docker-nix .
