@@ -71,6 +71,8 @@ RUN mkdir -p /etc/nix && echo sandbox = false > /etc/nix/nix.conf
 
 FROM nix-builder as front-build
 
+RUN apk add --no-cache make
+
 WORKDIR /build
 
 COPY . .
@@ -81,11 +83,11 @@ RUN nix-channel --add \
     https://nixos.org/channels/nixos-23.05 nixpkgs && \
     nix-channel --update 
     
-RUN  nix-env -iA nixpkgs.which && \
-     nix-env -iA nixpkgs.purescript && \ 
-     nix-env -iA nixpkgs.nodejs-18_x && \
-     nix-env -iA nixpkgs.jdk && \
-     nix-env -iA nixpkgs.wget && \
+# RUN  nix-env -iA nixpkgs.which && \
+#      nix-env -iA nixpkgs.purescript && \ 
+#      nix-env -iA nixpkgs.nodejs-18_x && \
+#      nix-env -iA nixpkgs.jdk && \
+RUN  nix-env -iA nixpkgs.wget && \
      nix-env -iA nixpkgs.gzip && \ 
      nix-env -iA nixpkgs.xz
 
