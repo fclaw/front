@@ -79,13 +79,11 @@ RUN nix-channel --add \
     https://nixos.org/channels/nixos-23.05 nixpkgs && \
     nix-channel --update 
     
-RUN  nix-env -iA nixpkgs.which && nix-env -iA nixpkgs.purescript && nix-env -iA nixpkgs.nodejs-18_x
+RUN  nix-env -iA nixpkgs.which && nix-env -iA nixpkgs.purescript
 
 RUN cp $(which purs) ./deploy/purescript-0.15.9 && mv ./deploy/purescript-0.15.9/purs ./deploy/purescript-0.15.9/purs.bin
 
-RUN npm install
-
-# RUN nix-shell dev.nix --command "npm install && npm run generate_api && npm run bundle"
+RUN nix-shell dev.nix --command "npm install && npm run generate_api && npm run bundle"
 
 # FROM nix-builder as main
 
