@@ -88,7 +88,9 @@ RUN cp $(which purs) ./deploy/purescript-0.15.9 && mv ./deploy/purescript-0.15.9
 
 RUN npm install
 
-RUN ./build/node_modules/.bin/spago --version
+RUN ls -la /build/node_modules/.bin
+
+RUN ./build/node_modules/.bin/openapi-generator-cli
 
 
 # RUN npm run generate_api && npm run bundle
