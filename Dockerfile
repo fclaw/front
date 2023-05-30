@@ -18,7 +18,7 @@ WORKDIR /home/nix
 
 COPY --chown=nix:nix ./deploy/nix.sh .
 
-RUN touch .bash_profile && nix.sh 
+RUN touch .bash_profile && /home/nix/nix.sh 
 
 ENV PATH="/home/nix/bin:${PATH}"
 
