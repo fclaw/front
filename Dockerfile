@@ -28,7 +28,7 @@ WORKDIR /build
 
 COPY . .
 
-RUN nix-shell --version
+RUN . /home/nix/.nix-profile/etc/profile.d/nix.sh && nix-shell --version
 
 # RUN nix-channel --add \
 #     https://nixos.org/channels/nixos-23.05 nixpkgs && \
