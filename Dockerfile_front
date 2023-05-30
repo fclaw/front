@@ -73,8 +73,9 @@ WORKDIR /build
 
 COPY . .
 
-RUN  nix-channel --update && \
-     nix-env -i purescript && \
+RUN  nix-channel --add https://nixos.org/channels/nixos-23.05 nix-2305 && \
+     nix-channel --update nix-2305 && \
+     nix-env -i nix-2305.purescript && \
      nix-shell dev.nix --command "npm install && purs-tidy format-in-place \"src/**/*.purs\" && npm run generate_api && npm run bundle"
 
 FROM nix-builder as main
