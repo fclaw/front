@@ -82,16 +82,17 @@ RUN nix-channel --add \
 RUN  nix-env -iA nixpkgs.which && \
      nix-env -iA nixpkgs.purescript && \ 
      nix-env -iA nixpkgs.nodejs-18_x && \
-     nix-env -iA nixpkgs.jdk;
+     nix-env -iA nixpkgs.jdk; && \
+     nix-env -iA nixpkgs.spago
 
 RUN cp $(which purs) ./deploy/purescript-0.15.9 && mv ./deploy/purescript-0.15.9/purs ./deploy/purescript-0.15.9/purs.bin 
 
 RUN npm install
 
+RUN mv $(which spago) /build/node_modules/spago
+
 RUN ls -la /build/node_modules/spago
-
 RUN ./build/node_modules/spago/spago
-
 
 # RUN npm run generate_api && npm run bundle
 
