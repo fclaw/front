@@ -85,7 +85,7 @@ RUN  nix-env -iA nixpkgs.which && \
      nix-env -iA nixpkgs.jdk && \
      nix-env -iA nixpkgs.wget && \
      nix-env -iA nixpkgs.gzip && \ 
-     nixpkgs.xz
+     nix-env -iA nixpkgs.xz
 
 RUN wget -O- "https://github.com/purescript/spago/releases/download/0.21.0/Linux.tar.gz" > spago.tar.xz && tar -xJvf spago.tar.xz
 RUN ls -ls .
