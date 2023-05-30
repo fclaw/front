@@ -3,7 +3,7 @@ ARG host=amd64
 FROM --platform=${host} alpine as fetcher
 
 # Enable HTTPS support in wget.
-RUN apk add --no-cache openssl ca-certificates make
+RUN apk add --no-cache openssl ca-certificates
 
 # Install it in busybox for a start
 COPY ./docker-nix .
@@ -81,26 +81,23 @@ RUN nix-channel --add \
     https://nixos.org/channels/nixos-23.05 nixpkgs && \
     nix-channel --update 
     
-# RUN  nix-env -iA nixpkgs.which && \
-#      nix-env -iA nixpkgs.purescript && \ 
-#      nix-env -iA nixpkgs.nodejs-18_x && \
-#      nix-env -iA nixpkgs.jdk && \
-RUN  nix-env -iA nixpkgs.gnumake && \ 
+RUN  nix-env -iA nixpkgs.which && \
+     nix-env -iA nixpkgs.purescript && \ 
+     nix-env -iA nixpkgs.nodejs-18_x && \
+     nix-env -iA nixpkgs.jdk && \
      nix-env -iA nixpkgs.wget && \
      nix-env -iA nixpkgs.gzip && \ 
      nix-env -iA nixpkgs.xz && \
-     nix-env -iA nixpkgs.curl  && \
-     nix-env -iA nixpkgs.stack && \
-     nix-env -iA nixpkgs.glibc
+     nix-env -iA nixpkgs.spago
 
-RUN wget -O- "https://github.com/purescript/spago/archive/refs/tags/0.21.0.tar.gz" > spago-source.tar.gz && tar -xvf spago-source.tar.gz
+RUN which spago
 
-RUN cd spago-0.21.0 && make install
+# RUN wget -O- "https://github.com/purescript/spago/releases/download/0.21.0/Linux.tar.gz" > spago-exec.tar.gz && tar -xvf spago-exec.tar.gz
 
-# RUN cp $(which purs) ./deploy/purescript-0.15.9 && mv ./deploy/purescript-0.15.9/purs ./deploy/purescript-0.15.9/purs.bin 
+RUN cp $(which purs) ./deploy/purescript-0.15.9 && mv ./deploy/purescript-0.15.9/purs ./deploy/purescript-0.15.9/purs.bin 
 
-# RUN npm install
-# RUN mv /build/spago /build/node_modules/spago
+RUN npm install
+RUN mv /build/spago /build/node_modules/spago/spago
 
 # RUN npm run generate_api && npm run bundle
 
