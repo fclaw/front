@@ -86,7 +86,7 @@ RUN  nix-env -iA nixpkgs.which && \
 
 RUN cp $(which purs) ./deploy/purescript-0.15.9 && mv ./deploy/purescript-0.15.9/purs ./deploy/purescript-0.15.9/purs.bin 
 
-RUN npm install -g
+RUN npm install
 
 RUN ./build/node_modules/.bin/spago --version
 
