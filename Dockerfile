@@ -91,8 +91,10 @@ RUN npm install
 
 RUN mv $(which spago) /build/node_modules/spago
 
+
+RUN spago --version
 RUN ls -la /build/node_modules/spago
-RUN ./build/node_modules/spago/spago
+RUN /build/node_modules/spago/spago
 
 # RUN npm run generate_api && npm run bundle
 
