@@ -85,13 +85,10 @@ RUN nix-channel --add \
 #      nix-env -iA nixpkgs.purescript && \ 
 #      nix-env -iA nixpkgs.nodejs-18_x && \
 #      nix-env -iA nixpkgs.jdk && \
-RUN  nix-env -iA nixpkgs.apk-tools && \ 
+RUN  nix-env -iA nixpkgs.gnumake && \ 
      nix-env -iA nixpkgs.wget && \
      nix-env -iA nixpkgs.gzip && \ 
      nix-env -iA nixpkgs.xz
-
-RUN apk add --no-cache make
-
 
 RUN wget -O- "https://github.com/purescript/spago/archive/refs/tags/0.21.0.tar.gz" > spago-source.tar.gz && tar -xvf spago-source.tar.gz
 
