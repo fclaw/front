@@ -1,7 +1,7 @@
 FROM amd64/ubuntu as fetcher
 
 # Enable HTTPS support in wget.
-RUN apt update && apt add openssl ca-certificates
+RUN apt update && apt install -y openssl ca-certificates
 
 # Install it in busybox for a start
 COPY ./docker-nix .
