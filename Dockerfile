@@ -81,23 +81,22 @@ RUN nix-channel --add \
     https://nixos.org/channels/nixos-23.05 nixpkgs && \
     nix-channel --update 
     
-RUN  nix-env -iA nixpkgs.which && \
-     nix-env -iA nixpkgs.purescript && \ 
-     nix-env -iA nixpkgs.nodejs-18_x && \
-     nix-env -iA nixpkgs.jdk && \
-     nix-env -iA nixpkgs.wget && \
-     nix-env -iA nixpkgs.gzip && \ 
-     nix-env -iA nixpkgs.xz && \
-     nix-env -iA nixpkgs.spago
+# RUN  nix-env -iA nixpkgs.which && \
+#      nix-env -iA nixpkgs.purescript && \ 
+#      nix-env -iA nixpkgs.nodejs-18_x && \
+#      nix-env -iA nixpkgs.jdk && \
+#      nix-env -iA nixpkgs.wget && \
+#      nix-env -iA nixpkgs.gzip && \ 
+#      nix-env -iA nixpkgs.xz && \
+RUN  nix-env -iA nixpkgs.spago
 
-RUN which spago
+RUN ./nix/var/nix/profiles/default/bin/spago
 
 # RUN wget -O- "https://github.com/purescript/spago/releases/download/0.21.0/Linux.tar.gz" > spago-exec.tar.gz && tar -xvf spago-exec.tar.gz
 
-RUN cp $(which purs) ./deploy/purescript-0.15.9 && mv ./deploy/purescript-0.15.9/purs ./deploy/purescript-0.15.9/purs.bin 
+# RUN cp $(which purs) ./deploy/purescript-0.15.9 && mv ./deploy/purescript-0.15.9/purs ./deploy/purescript-0.15.9/purs.bin 
 
-RUN npm install
-RUN mv /build/spago /build/node_modules/spago/spago
+# RUN npm install
 
 # RUN npm run generate_api && npm run bundle
 
