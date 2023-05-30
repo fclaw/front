@@ -5,7 +5,13 @@ set -o pipefail
 # shellcheck disable=SC1091
 . ./version.env
 
-wget -O- "https://nixos.org/releases/nix/nix-$NIX_RELEASE/nix-$NIX_RELEASE-x86_64-linux.tar.xz" > nix.tar.xz
+case "$(uname -s).$(uname -m)" in
+    Linux.x86_64) system=x86_64-linux;;
+    Linux.aarch64) system=aarch64-linux;;
+    *) oops "sorry, there is no binary distribution of Nix for your platform";;
+esac
+
+wget -O- "https://nixos.org/releases/nix/nix-$NIX_RELEASE/nix-$NIX_RELEASE-$system.tar.xz" > nix.tar.xz
 actual_hash="$(sha256sum -b nix.tar.xz | cut -c1-64)"
 
 if [ "$NIX_HASH" != "$actual_hash" ]; then
