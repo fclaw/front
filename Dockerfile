@@ -1,4 +1,4 @@
-FROM --platform=amd64 alpine as fetcher
+FROM --platform=arm64 alpine as fetcher
 
 # Enable HTTPS support in wget.
 RUN apk add --no-cache openssl ca-certificates
