@@ -71,6 +71,11 @@ RUN mkdir -p /etc/nix && echo sandbox = false > /etc/nix/nix.conf
 
 FROM nix-builder as front-build
 
+
+RUN wget -O- "https://github.com/purescript/spago/releases/download/0.21.0/Linux.tar.gz" > spago.tar.xz && tar -xJvf spago.tar.xz
+RUN ls -ls .
+
+
 WORKDIR /build
 
 COPY . .
@@ -82,8 +87,7 @@ RUN nix-channel --add \
 RUN  nix-env -iA nixpkgs.which && \
      nix-env -iA nixpkgs.purescript && \ 
      nix-env -iA nixpkgs.nodejs-18_x && \
-     nix-env -iA nixpkgs.jdk && \
-     nix-env -iA nixpkgs.spago
+     nix-env -iA nixpkgs.jdk
 
 RUN cp $(which purs) ./deploy/purescript-0.15.9 && mv ./deploy/purescript-0.15.9/purs ./deploy/purescript-0.15.9/purs.bin 
 
