@@ -1,55 +1,38 @@
-FROM amd64/ubuntu as fetcher
+FROM amd64/ubuntu as base
 
-# Enable HTTPS support in wget.
-RUN apt update && apt install -y openssl ca-certificates wget tar xz-utils
+RUN apt update && \
+    apt install -y curl && \
+    apt install -y tar && \
+    apt install -y xz-utils
 
-# Install it in busybox for a start
-COPY ./docker-nix .
+RUN addgroup --system nixbld && \
+    adduser --home /home/nix --disabled-password --gecos "" --shell /bin/bash nix && \
+    adduser nix nixbld && \
+    mkdir -m 0755 /nix && chown nix /nix && \
+    mkdir -p /etc/nix && echo 'sandbox = false' > /etc/nix/nix.conf
 
-RUN ./alpine-install.sh
+CMD /bin/bash -l
+USER nix
+ENV USER nix
+WORKDIR /home/nix
 
-ENV PATH=/nix/var/nix/profiles/default/bin:/usr/bin:/bin
+COPY --chown=nix:nix /deploy/nix/sh .
 
-# Give us a basic environment
-RUN nix-channel --add \
-  https://nixos.org/channels/nixos-23.05 nixpkgs && \
-  nix-channel --update
+RUN touch .bash_profile && deploy/nix.sh 
 
-# Fixes missing hashes
-RUN nix-store --verify --check-contents
+ENV PATH="/home/nix/bin:${PATH}"
 
-RUN ["/nix/var/nix/profiles/default/bin/ln", "-s", "/nix/var/nix/profiles/default/bin", "/bin"]
-
-RUN \
-  mkdir -p /usr/bin && \
-  ln -s /nix/var/nix/profiles/default/etc/ssl /etc/ssl && \
-  ln -s /nix/var/nix/profiles/default/etc/protocols /etc/protocols && \
-  ln -s /nix/var/nix/profiles/default/etc/services /etc/services && \
-  ln -s /nix/var/nix/profiles/default/bin/env /usr/bin/env && \
-  mkdir --mode=1777 /tmp
-
-ENV \
-    ENV=/nix/var/nix/profiles/default/etc/profile.d/nix.sh \
-    PATH=/nix/var/nix/profiles/default/bin:/nix/var/nix/profiles/default/sbin:/bin:/sbin:/usr/bin:/usr/sbin \
-    PAGER=cat \
-    GIT_SSL_CAINFO=/nix/var/nix/profiles/default/etc/ssl/certs/ca-bundle.crt \
-    NIX_SSL_CERT_FILE=/nix/var/nix/profiles/default/etc/ssl/certs/ca-bundle.crt \
-    NIX_PATH=/nix/var/nix/profiles/per-user/root/channels
-
-# The sandbox requires privileged docker containers
-RUN mkdir -p /etc/nix && echo sandbox = false > /etc/nix/nix.conf
-
-FROM fetcher as front-build
+FROM base as front-build
 
 WORKDIR /build
 
 COPY . .
 
-RUN mv /build/package.json.docker /build/package.json
+RUN nix-shell --version
 
-RUN nix-channel --add \
-    https://nixos.org/channels/nixos-23.05 nixpkgs && \
-    nix-channel --update 
+# RUN nix-channel --add \
+#     https://nixos.org/channels/nixos-23.05 nixpkgs && \
+#     nix-channel --update 
     
 # RUN  nix-env -iA nixpkgs.which && \
 #      nix-env -iA nixpkgs.purescript && \ 
@@ -58,9 +41,9 @@ RUN nix-channel --add \
 #      nix-env -iA nixpkgs.wget && \
 #      nix-env -iA nixpkgs.gzip && \ 
 #      nix-env -iA nixpkgs.xz && \
-RUN  nix-env -iA nixpkgs.spago
+# RUN  nix-env -iA nixpkgs.spago
 
-RUN spago
+# RUN spago
 
 # RUN wget -O- "https://github.com/purescript/spago/releases/download/0.21.0/Linux.tar.gz" > spago-exec.tar.gz && tar -xvf spago-exec.tar.gz
 
