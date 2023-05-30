@@ -1,6 +1,6 @@
 ARG host=amd64
 
-FROM --platform=${host} alpine as fetcher
+FROM --platform=${host} ubuntu as fetcher
 
 # Enable HTTPS support in wget.
 RUN apk add --no-cache openssl ca-certificates
@@ -17,36 +17,8 @@ RUN nix-channel --add \
   https://nixos.org/channels/nixos-23.05 nixpkgs && \
   nix-channel --update
 
-
-RUN nix-env -iA \
-  nixpkgs.bashInteractive \
-  nixpkgs.cacert \
-  nixpkgs.coreutils \
-  nixpkgs.gitMinimal \
-  nixpkgs.gnutar \
-  nixpkgs.gzip \
-  nixpkgs.iana-etc \
-  nixpkgs.xz \ 
-  && true
-
-# Remove old things
-RUN \
-  nix-channel --remove nixpkgs && \
-  rm -rf /nix/store/*-nixpkgs* && \
-  nix-collect-garbage -d
-
 # Fixes missing hashes
 RUN nix-store --verify --check-contents
-
-# Fixes root login shell
-RUN sed -e "s|/bin/ash|/bin/bash|g" -i /etc/passwd
-
-FROM scratch as nix-builder
-COPY --from=fetcher /etc/group /etc/group
-COPY --from=fetcher /etc/passwd /etc/passwd
-COPY --from=fetcher /etc/shadow /etc/shadow
-COPY --from=fetcher /nix /nix
-COPY --from=fetcher /root /root
 
 RUN ["/nix/var/nix/profiles/default/bin/ln", "-s", "/nix/var/nix/profiles/default/bin", "/bin"]
 
@@ -90,7 +62,7 @@ RUN nix-channel --add \
 #      nix-env -iA nixpkgs.xz && \
 RUN  nix-env -iA nixpkgs.spago
 
-RUN ./nix/var/nix/profiles/default/bin/spago
+RUN spago
 
 # RUN wget -O- "https://github.com/purescript/spago/releases/download/0.21.0/Linux.tar.gz" > spago-exec.tar.gz && tar -xvf spago-exec.tar.gz
 
