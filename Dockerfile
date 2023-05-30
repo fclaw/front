@@ -6,6 +6,9 @@ RUN apk add --no-cache openssl ca-certificates
 # Install it in busybox for a start
 COPY ./docker-nix/version.env ./version.env
 COPY ./docker-nix/alpine-install.sh ./alpine-install.sh
+
+RUN ls -la .
+
 RUN ./alpine-install.sh
 
 ENV PATH=/nix/var/nix/profiles/default/bin:/usr/bin:/bin
