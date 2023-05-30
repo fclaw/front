@@ -11,7 +11,7 @@
     "clean": "rm -rf output-es node_modules output .spago dist/*.js *.lock .cache",
     "test": "spago test",
     "serve": "node esbuild-serve.mjs",
-    "bundle": "rm node_modules/purescript/purs.bin && cp $(which purs) node_modules/purescript && mv node_modules/purescript/purs node_modules/purescript/purs.bin && spago build && cp -r src/App/Api/Foreign output/App.Api.Endpoints && node esbuild.mjs",
+    "bundle": "spago build && cp -r src/App/Api/Foreign output/App.Api.Endpoints && node esbuild.mjs",
     "generate_api": "node api_updater.mjs && rm -rf src/App/Api/Foreign/* && openapi-generator-cli generate -i api.json -g javascript -o src/App/Api/Foreign --additional-properties=usePromises=true,emitModelMethods=true"
   },
   "dependencies": {
