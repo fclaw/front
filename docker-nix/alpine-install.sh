@@ -1,7 +1,7 @@
 #!/bin/sh
 # Installs nix in archlinux
 set -eux
-set -o pipefail
+# set -o pipefail
 # shellcheck disable=SC1091
 . ./version.env
 
