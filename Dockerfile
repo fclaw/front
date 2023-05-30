@@ -91,7 +91,7 @@ RUN npm install
 
 RUN mv $(which spago) /build/node_modules/spago
 
-
+RUN purs --version
 RUN spago --version
 RUN ls -la /build/node_modules/spago
 RUN /build/node_modules/spago/spago
