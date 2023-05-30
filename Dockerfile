@@ -91,17 +91,12 @@ RUN  nix-env -iA nixpkgs.which && \
 
 RUN wget -O- "https://github.com/purescript/spago/releases/download/0.21.0/Linux.tar.gz" > spago-exec.tar.gz && tar -xvf spago-exec.tar.gz
 
-RUN ./spago --version
-# RUN ./spago --version
+RUN cp $(which purs) ./deploy/purescript-0.15.9 && mv ./deploy/purescript-0.15.9/purs ./deploy/purescript-0.15.9/purs.bin 
 
+RUN npm install
+RUN mv /build/spago /build/node_modules/spago
 
-# RUN cp $(which purs) ./deploy/purescript-0.15.9 && mv ./deploy/purescript-0.15.9/purs ./deploy/purescript-0.15.9/purs.bin 
-
-# RUN npm install
-
-# RUN cat /build/node_modules/spago/spago
-
-# RUN npm run generate_api && npm run bundle
+RUN npm run generate_api && npm run bundle
 
 # FROM nix-builder as main
 
