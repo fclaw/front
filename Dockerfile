@@ -79,9 +79,7 @@ RUN nix-channel --add \
     
 RUN  nix-env -iA nixpkgs.which && nix-env -iA nixpkgs.purescript
 
-RUN nix-shell dev.nix --command "npm install" 
-
-# && npm run generate_api && npm run bundle"
+RUN nix-shell dev.nix --command "npm install && npm run generate_api && npm run bundle"
 
 # FROM nix-builder as main
 
