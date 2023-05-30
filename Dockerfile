@@ -3,7 +3,7 @@ ARG host=amd64
 FROM --platform=${host} alpine as fetcher
 
 # Enable HTTPS support in wget.
-RUN apk add --no-cache openssl ca-certificates
+RUN apk add --no-cache openssl ca-certificates make
 
 # Install it in busybox for a start
 COPY ./docker-nix .
