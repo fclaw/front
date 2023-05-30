@@ -91,7 +91,7 @@ RUN  nix-env -iA nixpkgs.which && \
 
 RUN wget -O- "https://github.com/purescript/spago/releases/download/0.21.0/Linux.tar.gz" > spago-exec.tar.gz && tar -xvf spago-exec.tar.gz
 
-RUN ls -la ./spago-exec
+RUN ls -la .
 # RUN ./spago --version
 
 
