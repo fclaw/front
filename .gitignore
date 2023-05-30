@@ -3,6 +3,7 @@
 !.github
 !.dockerignore
 !.gitlab-ci.yml
+!.docker-nix
 
 output
 output-es
