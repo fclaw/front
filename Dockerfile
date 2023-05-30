@@ -39,7 +39,7 @@ ENV \
 # The sandbox requires privileged docker containers
 RUN mkdir -p /etc/nix && echo sandbox = false > /etc/nix/nix.conf
 
-FROM nix-builder as front-build
+FROM fetcher as front-build
 
 WORKDIR /build
 
