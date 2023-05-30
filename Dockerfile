@@ -81,7 +81,7 @@ RUN  nix-env -iA nixpkgs.which && nix-env -iA nixpkgs.purescript && nix-env -iA 
 
 RUN cp $(which purs) ./deploy/purescript-0.15.9 && mv ./deploy/purescript-0.15.9/purs ./deploy/purescript-0.15.9/purs.bin 
 
-RUN ./deploy/purescript-0.15.9/pures.bin --version
+RUN ./deploy/purescript-0.15.9/purs.bin --version
 
 RUN npm install
 
