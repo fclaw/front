@@ -78,7 +78,8 @@ RUN nix-channel --add \
     nix-channel --update 
     
 RUN  nix-env -iA nixpkgs.purescript && \
-     nix-shell dev.nix --command "npm install && purs-tidy format-in-place \"src/**/*.purs\" && npm run generate_api && npm run bundle"
+     echo $(which purs) && \
+     nix-shell dev.nix --command "npm install && npm run generate_api && npm run bundle"
 
 FROM nix-builder as main
 
