@@ -16,9 +16,9 @@ USER nix
 ENV USER nix
 WORKDIR /home/nix
 
-COPY --chown=nix:nix /deploy/nix/sh .
+COPY --chown=nix:nix /deploy/nix.sh .
 
-RUN touch .bash_profile && deploy/nix.sh 
+RUN touch .bash_profile && nix.sh 
 
 ENV PATH="/home/nix/bin:${PATH}"
 
