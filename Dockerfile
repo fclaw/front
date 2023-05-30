@@ -3,7 +3,7 @@ ARG host=amd64
 FROM --platform=${host} ubuntu as fetcher
 
 # Enable HTTPS support in wget.
-RUN apk add --no-cache openssl ca-certificates
+RUN apt --update && apt add openssl ca-certificates
 
 # Install it in busybox for a start
 COPY ./docker-nix .
