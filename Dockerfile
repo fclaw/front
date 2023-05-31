@@ -16,7 +16,7 @@ USER nix
 ENV USER nix
 WORKDIR /home/nix
 
-COPY --chown=nix:nix ./deploy/nix.sh .
+COPY --chown=nix:nix ./nix/install.sh .
 
 RUN touch .bash_profile && /home/nix/nix.sh 
 
@@ -45,5 +45,6 @@ COPY --from=front-build /build/*.mjs /app
 COPY --from=front-build /build/package.json /app
 COPY --from=front-build /build/node_modules /app/node_modules
 COPY --from=front-build /build/output /app/output
+COPY --from=front-build /build/nix/prod.nix /app
 
 ENTRYPOINT ["/app/init.sh"]
