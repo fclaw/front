@@ -83,7 +83,7 @@ jobs:
         if: ${{ contains(github.ref_type, 'branch') }}
         with:
           images: |
-              ${{ vars.DOCKER_IMAGE }}      
+              ${{ vars.REPO }}      
           tags: |       
               type=raw,value=${{ github.ref_name }}_${{ github.sha }},enable=${{ github.ref == format('refs/heads/{0}', github.ref_name) }}
                   
