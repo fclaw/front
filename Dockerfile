@@ -16,7 +16,7 @@ USER nix
 ENV USER nix
 WORKDIR /home/nix
 
-COPY --chown=nix:nix ./deploy/nix.sh .
+COPY --chown=nix:nix ./deploy/nix.sh ./deploy/nix-version.env ./
 
 RUN touch .bash_profile && /home/nix/nix.sh 
 
