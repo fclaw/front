@@ -26,7 +26,7 @@ FROM base as front-build
 
 WORKDIR /build
 
-COPY . .
+COPY --chown=nix:nix . .
 
 RUN . /home/nix/.nix-profile/etc/profile.d/nix.sh && \ 
       nix-env -i purescript && \
