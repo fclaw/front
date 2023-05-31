@@ -36,9 +36,9 @@ FROM base as main
 
 WORKDIR /app
 
-COPY --from=front-build /build/dist /app/dist
-COPY --from=front-build /build/node_modules /app/node_modules
-COPY --from=front-build /build/output /app/output
-COPY --from=front-build /build/nix/prod.nix /build/deploy /build/index.js /build/config.json /build/*.mjs /build/package.json /app/
+COPY --from=front-build --chown=nix:nix /build/dist /app/dist
+COPY --from=front-build --chown=nix:nix /build/node_modules /app/node_modules
+COPY --from=front-build --chown=nix:nix /build/output /app/output
+COPY --from=front-build --chown=nix:nix /build/nix/prod.nix /build/deploy /build/index.js /build/config.json /build/*.mjs /build/package.json /app/
 
 ENTRYPOINT ["/app/init.sh"]

@@ -8,14 +8,12 @@ branch=$(git rev-parse --abbrev-ref HEAD)
 tag="${branch}_${sha}"
 
 cat <<EOT >> .env
-  DBUSER=sonny
-  DATABASE=scaffold
   TAG=$tag
 EOT
 
 if [ $# -ge 1 ] && [ -n "$2" ]
 then 
-  composer=$1
+  composer=$2
 
   if [ $composer == "yes" ]
   then
