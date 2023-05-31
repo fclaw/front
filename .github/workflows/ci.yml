@@ -95,7 +95,4 @@ jobs:
           push: true
           tags: |
             ${{ steps.meta_tag.outputs.tags }}
-            ${{ steps.meta_branch.outputs.tags }}  
-            
-            
-            registry: 872112711333.dkr.ecr.north-1.amazonaws.com
+            ${{ steps.meta_branch.outputs.tags }} 
