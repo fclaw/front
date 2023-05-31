@@ -1,9 +1,8 @@
-FROM amd64/ubuntu as base
+ARG host=amd64
 
-RUN apt update && \
-    apt install -y curl && \
-    apt install -y tar && \
-    apt install -y xz-utils
+FROM --platform=${host} alpine as base
+
+RUN apk add --no-cache curl tar xz
 
 RUN addgroup --system nixbld && \
     adduser --home /home/nix --disabled-password --gecos "" --shell /bin/bash nix && \
