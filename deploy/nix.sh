@@ -10,6 +10,8 @@ oops() {
     exit 1
 }
 
+ . ./nix-version.env
+
 tmpDir="$(mktemp -d -t nix-binary-tarball-unpack.XXXXXXXXXX || \
           oops "Can't create temporary directory for downloading the Nix binary tarball")"
 cleanup() {
@@ -28,9 +30,9 @@ case "$(uname -s).$(uname -m)" in
     *) oops "sorry, there is no binary distribution of Nix for your platform";;
 esac
 
-url="https://releases.nixos.org/nix/nix-2.13.3/nix-2.13.3-$system.tar.xz"
+url="https://releases.nixos.org/nix/nix-$NIX-VERSION/nix-$NIX-VERSION-$system.tar.xz"
 
-tarball="$tmpDir/$(basename "$tmpDir/nix-2.13.3-$system.tar.xz")"
+tarball="$tmpDir/$(basename "$tmpDir/nix-$NIX-VERSION-$system.tar.xz")"
 
 require_util curl "download the binary tarball"
 require_util tar "unpack the binary tarball"
@@ -38,7 +40,7 @@ if [ "$(uname -s)" != "Darwin" ]; then
     require_util xz "unpack the binary tarball"
 fi
 
-echo "downloading Nix 2.3.3 binary tarball for $system from '$url' to '$tmpDir'..."
+echo "downloading Nix $NIX-VERSION binary tarball for $system from '$url' to '$tmpDir'..."
 curl -L "$url" -o "$tarball" || oops "failed to download '$url'"
 
 if command -v sha256sum > /dev/null 2>&1; then

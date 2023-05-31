@@ -3,7 +3,7 @@
 !dev
 !src
 !test
-!package.json.docker
+!package.json
 !*.dhall
 !*.nix
 !*.mjs
