@@ -94,5 +94,5 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            ${{ steps.meta_tag.outputs.tags }}
-            ${{ steps.meta_branch.outputs.tags }} 
+            872112711333.dkr.ecr.eu-north-1.amazonaws.com/sonny/${{ steps.meta_tag.outputs.tags }}
+            872112711333.dkr.ecr.eu-north-1.amazonaws.com/sonny/${{ steps.meta_branch.outputs.tags }}
