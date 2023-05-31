@@ -67,6 +67,11 @@ jobs:
           registry: 872112711333.dkr.ecr.eu-north-1.amazonaws.com/sonny
           username: ${{ secrets.AWS_ACCESS_KEY_ID }}
           password: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1 
+          
       - name: Docker meta tag
         id: meta_tag
         uses: docker/metadata-action@v4
@@ -89,10 +94,12 @@ jobs:
                   
       - name: Build and push Docker image
         uses: docker/build-push-action@v4.0.0
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         with:
           context: .
           file: ./Dockerfile
           push: true
           tags: |
-            872112711333.dkr.ecr.eu-north-1.amazonaws.com/sonny/${{ steps.meta_tag.outputs.tags }}
-            872112711333.dkr.ecr.eu-north-1.amazonaws.com/sonny/${{ steps.meta_branch.outputs.tags }}
+            $ECR_REGISTRY/${{ steps.meta_tag.outputs.tags }}
+            $ECR_REGISTRY/${{ steps.meta_branch.outputs.tags }}
