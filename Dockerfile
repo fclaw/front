@@ -39,7 +39,6 @@ WORKDIR /app
 COPY --from=front-build /build/deploy /app
 COPY --from=front-build /build/dist /app/dist
 COPY --from=front-build /build/index.js /app
-COPY --from=front-build /build/prod.nix /app
 COPY --from=front-build /build/config.json /app
 COPY --from=front-build /build/*.mjs /app
 COPY --from=front-build /build/package.json /app
