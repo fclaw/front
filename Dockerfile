@@ -1,8 +1,9 @@
-ARG host=amd64
+FROM amd64/ubuntu as base
 
-FROM --platform=${host} alpine as base
-
-RUN apk add --no-cache curl tar xz
+RUN apt update && \
+    apt install -y curl && \
+    apt install -y tar && \
+    apt install -y xz-utils
 
 RUN addgroup --system nixbld && \
     adduser --home /home/nix --disabled-password --gecos "" --shell /bin/bash nix && \
@@ -35,14 +36,9 @@ FROM base as main
 
 WORKDIR /app
 
-COPY --from=front-build /build/deploy /app
 COPY --from=front-build /build/dist /app/dist
-COPY --from=front-build /build/index.js /app
-COPY --from=front-build /build/config.json /app
-COPY --from=front-build /build/*.mjs /app
-COPY --from=front-build /build/package.json /app
 COPY --from=front-build /build/node_modules /app/node_modules
 COPY --from=front-build /build/output /app/output
-COPY --from=front-build /build/nix/prod.nix /app
+COPY --from=front-build /build/nix/prod.nix /build/deploy /build/index.js /build/config.json /build/*.mjs /build/package.json /app/
 
 ENTRYPOINT ["/app/init.sh"]
