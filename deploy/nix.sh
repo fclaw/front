@@ -30,9 +30,9 @@ case "$(uname -s).$(uname -m)" in
     *) oops "sorry, there is no binary distribution of Nix for your platform";;
 esac
 
-url="https://releases.nixos.org/nix/nix-$NIX-VERSION/nix-$NIX-VERSION-$system.tar.xz"
+url="https://releases.nixos.org/nix/nix-$version/nix-$version-$system.tar.xz"
 
-tarball="$tmpDir/$(basename "$tmpDir/nix-$NIX-VERSION-$system.tar.xz")"
+tarball="$tmpDir/$(basename "$tmpDir/nix-$version-$system.tar.xz")"
 
 require_util curl "download the binary tarball"
 require_util tar "unpack the binary tarball"
@@ -40,7 +40,7 @@ if [ "$(uname -s)" != "Darwin" ]; then
     require_util xz "unpack the binary tarball"
 fi
 
-echo "downloading Nix $NIX-VERSION binary tarball for $system from '$url' to '$tmpDir'..."
+echo "downloading Nix $version binary tarball for $system from '$url' to '$tmpDir'..."
 curl -L "$url" -o "$tarball" || oops "failed to download '$url'"
 
 if command -v sha256sum > /dev/null 2>&1; then
