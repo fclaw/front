@@ -61,12 +61,16 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3.5.2
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: north-1
       - name: Login to ECR
         uses: docker/login-action@v2
         with:
-          registry: 872112711333.dkr.ecr.north-1.amazonaws.com
-          username: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          password: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            registry: 872112711333.dkr.ecr.north-1.amazonaws.com
       - name: Docker meta tag
         id: meta_tag
         uses: docker/metadata-action@v4
@@ -95,4 +99,4 @@ jobs:
           push: true
           tags: |
             ${{ steps.meta_tag.outputs.tags }}
-            ${{ steps.meta_branch.outputs.tags }}          
+            ${{ steps.meta_branch.outputs.tags }}
