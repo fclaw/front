@@ -10,4 +10,4 @@
 !config.json
 !dist
 !index.js
-!docker-nix
+!nix

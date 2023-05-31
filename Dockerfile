@@ -30,7 +30,7 @@ COPY --chown=nix:nix . .
 
 RUN . /home/nix/.nix-profile/etc/profile.d/nix.sh && \ 
       nix-env -i purescript && \
-      nix-shell dev.nix --command "npm install && npm run generate_api && npm run bundle"
+      nix-shell ./nix/build.nix --command "npm install && npm run generate_api && npm run bundle"
 
 FROM base as main
 
