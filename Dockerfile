@@ -32,18 +32,18 @@ RUN . /home/nix/.nix-profile/etc/profile.d/nix.sh && \
       nix-env -i purescript && \
       nix-shell dev.nix --command "npm install && npm run generate_api && npm run bundle"
 
-# FROM nix-builder as main
+FROM base as main
 
-# WORKDIR /app
+WORKDIR /app
 
-# COPY --from=front-build /build/deploy /app
-# COPY --from=front-build /build/dist /app/dist
-# COPY --from=front-build /build/index.js /app
-# COPY --from=front-build /build/prod.nix /app
-# COPY --from=front-build /build/config.json /app
-# COPY --from=front-build /build/*.mjs /app
-# COPY --from=front-build /build/package.json /app
-# COPY --from=front-build /build/node_modules /app/node_modules
-# COPY --from=front-build /build/output /app/output
+COPY --from=front-build /build/deploy /app
+COPY --from=front-build /build/dist /app/dist
+COPY --from=front-build /build/index.js /app
+COPY --from=front-build /build/prod.nix /app
+COPY --from=front-build /build/config.json /app
+COPY --from=front-build /build/*.mjs /app
+COPY --from=front-build /build/package.json /app
+COPY --from=front-build /build/node_modules /app/node_modules
+COPY --from=front-build /build/output /app/output
 
-# ENTRYPOINT ["/app/init.sh"]
+ENTRYPOINT ["/app/init.sh"]
