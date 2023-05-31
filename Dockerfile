@@ -18,7 +18,7 @@ WORKDIR /home/nix
 
 COPY --chown=nix:nix ./nix/install.sh .
 
-RUN touch .bash_profile && install.sh 
+RUN touch .bash_profile && /home/nix/install.sh 
 
 ENV PATH="/home/nix/bin:${PATH}"
 
