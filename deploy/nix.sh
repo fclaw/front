@@ -10,7 +10,7 @@ oops() {
     exit 1
 }
 
- $version=2.13.3
+version="2.13.3"
 
 tmpDir="$(mktemp -d -t nix-binary-tarball-unpack.XXXXXXXXXX || \
           oops "Can't create temporary directory for downloading the Nix binary tarball")"
