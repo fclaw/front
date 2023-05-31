@@ -2,7 +2,11 @@ name: Docker Image for Frontend
 
 on: 
   push:
-    branches: [ main ]
+    branches: 
+      - '*'
+        # Pattern matched against refs/tags
+    tags:        
+      - '*' # Push events to every tag not containing /
 
 jobs:
 
@@ -19,20 +23,32 @@ jobs:
            username: ${{ secrets.DOCKER_USER }}
            password: ${{ secrets.DOCKER_PASS }}
             
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v4 
+      - name: Docker meta tag
+        id: meta_tag
+        uses: docker/metadata-action@v4
+        if: ${{ contains(github.ref_type, 'tag') }}
         with:
            images: |
-              ${{ vars.DOCKER_IMAGE }} 
+              ${{ vars.DOCKER_IMAGE }}      
            tags: |
-              type=raw,value=main_${{ github.sha }},enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
-            
+              type=raw,value=${{ github.ref_name }}
+              
+      - name: Docker meta branch
+        id: meta_branch
+        uses: docker/metadata-action@v4 
+        if: ${{ contains(github.ref_type, 'branch') }}
+        with:
+          images: |
+              ${{ vars.DOCKER_IMAGE }}      
+          tags: |       
+              type=raw,value=${{ github.ref_name }}_${{ github.sha }},enable=${{ github.ref == format('refs/heads/{0}', github.ref_name) }}
+                 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4.0.0
         with:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-
+          tags: |
+            ${{ steps.meta_tag.outputs.tags }}
+            ${{ steps.meta_branch.outputs.tags }}
