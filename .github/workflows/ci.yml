@@ -93,8 +93,6 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         with:
-          build-args: |
-            swagger_url:test111
           context: .
           file: ./Dockerfile
           push: true

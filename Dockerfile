@@ -1,8 +1,4 @@
-ARG swagger_url
-
 FROM amd64/ubuntu as base
-
-RUN echo $swagger_url
 
 RUN apt update && \
     apt install -y curl && \
@@ -34,7 +30,7 @@ COPY --chown=nix:nix . .
 
 RUN . /home/nix/.nix-profile/etc/profile.d/nix.sh && \ 
       nix-env -i purescript && \
-      nix-shell ./nix/build.nix --command "npm install && npm run generate_api -- $swagger_url && npm run bundle"
+      nix-shell ./nix/build.nix --command "npm install && npm run generate_api -- https://523f-78-180-9-98.ngrok-free.app/swagger.json && npm run bundle"
 
 FROM base as main
 
