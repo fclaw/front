@@ -3,8 +3,7 @@ module Main (main) where
 import Prelude (Unit, bind, ($), void, when, (/=), pure, discard, (>>=))
 
 import App.Data.Route (routeCodec)
-import App.Component.Router as Router
-import App.Component.Router as Router
+import App.Component.Root as Root
 import App.Data.Config as Cfg
 import App.Data.Profile as P
 
@@ -62,7 +61,7 @@ main config =
     -- But Halogen only knows how to run components in the `Aff` (asynchronous effects) monad. `Aff`
     -- has no idea how to interpret our capabilities. We need a way to change our router component so
     -- that it runs in `Aff` instead of `AppM`. We can do that with `runAppM`:
-    rootComponent <- AppM.runAppM initialStore Router.component
+    rootComponent <- AppM.runAppM initialStore Root.component
 
     -- Now we have the two things we need to run a Halogen application: a reference to an HTML element
     -- and the component to run there.
@@ -93,7 +92,7 @@ main config =
     -- https://github.com/slamdata/purescript-routing/blob/v8.0.0/GUIDE.md
     -- https://github.com/natefaubion/purescript-routing-duplex/blob/v0.2.0/README.md
     void $ liftEffect $ matchesWith (parse routeCodec) \old new ->
-      when (old /= Just new) $ launchAff_ $ void $ halogenIO.query $ H.mkTell $ Router.Navigate new
+      when (old /= Just new) $ launchAff_ $ void $ halogenIO.query $ H.mkTell $ Root.Navigate new
 
 
 loadUser :: Maybe S.Token -> Aff (Maybe P.Profile)

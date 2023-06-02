@@ -3,13 +3,14 @@
 -- | given a particular `Route` and to manage the user's location in the application.
 -- |
 -- | See `Main` to understand how this component is used as the root of the application.
-module App.Component.Router
+module App.Component.Root
   ( Action(..)
   , ChildSlots
   , Query(..)
   , State
   , component
-  ) where
+  )
+  where
 
 import Prelude
 
@@ -56,7 +57,6 @@ type ChildSlots =
   , login :: OpaqueSlot Unit
   , register :: OpaqueSlot Unit
   )
-
 
 component
   :: forall m

@@ -46,3 +46,8 @@ function (build, msg)
 }
 
 export const getDataFromResponse = json => () => { e.Response.validateJSON(json); return e.Response.constructFromObject(json).getSuccess(); }
+
+
+export const mkFileApi = client => { return function () { return new e.FileApi(client); } }
+
+export const sendFiles = function(bucket, files, api) { return function (onError, onOk) { api.apiFileBucketPut(bucket, files).then(onOk).catch(onError) }; }
