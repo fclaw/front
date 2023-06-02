@@ -1,5 +1,5 @@
 # action.yml
-name: 'Server'
+name: 'Front'
 description: 'Docker image'
 runs:
   using: 'docker'
