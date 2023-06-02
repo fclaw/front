@@ -1,6 +1,6 @@
-FROM amd64/ubuntu as base
-
 ARG swagger_url
+
+FROM amd64/ubuntu as base
 
 RUN echo $swagger_url
 
