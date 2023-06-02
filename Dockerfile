@@ -2,6 +2,8 @@ FROM amd64/ubuntu as base
 
 ARG swagger_url
 
+RUN echo $swagger_url
+
 RUN apt update && \
     apt install -y curl && \
     apt install -y tar && \
