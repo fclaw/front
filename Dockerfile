@@ -1,5 +1,7 @@
 FROM amd64/ubuntu as base
 
+ARG swagger_url
+
 RUN apt update && \
     apt install -y curl && \
     apt install -y tar && \
@@ -30,7 +32,7 @@ COPY --chown=nix:nix . .
 
 RUN . /home/nix/.nix-profile/etc/profile.d/nix.sh && \ 
       nix-env -i purescript && \
-      nix-shell ./nix/build.nix --command "npm install && npm run generate_api && npm run bundle"
+      nix-shell ./nix/build.nix --command "npm install && npm run generate_api -- $swagger_url && npm run bundle"
 
 FROM base as main
 
