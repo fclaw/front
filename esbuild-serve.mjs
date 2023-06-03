@@ -6,11 +6,11 @@ let ctx = await esbuild.context({
   // ... your build options go here ...
   entryPoints: ['index.js'],
   bundle: true,
-  outfile: 'dist/app.js'
+  outfile: 'app/app.js'
 });
 
 // The return value tells us where esbuild's local server is
-let { host, port } = await ctx.serve({ servedir: 'dist', port: 8080, host: "127.0.0.1"});
+let { host, port } = await ctx.serve({ servedir: 'app', port: 8080, host: "127.0.0.1"});
 
 console.log('\x1b[44m', 'server has been started: ' + 'http://' + host + ':' + port, '\x1b[0m');
 

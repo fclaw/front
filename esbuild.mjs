@@ -16,7 +16,7 @@ await esbuild.build({
   minify: true
 }).then(_ => { 
     var elapsedSeconds = parseHrtimeToSeconds(process.hrtime(startTime));
-    const {size} = statSync('dist/app.js');
+    const {size} = statSync('app/app.js');
     const fileSizeInMb = filesize(size, {round: 0});
     console.log('\x1b[44m', 'build has been completed, dist/app.js: ' + fileSizeInMb + ', build time: ' + elapsedSeconds + 's', '\x1b[0m');
 });
