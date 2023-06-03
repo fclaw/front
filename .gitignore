@@ -2,19 +2,15 @@
 !.gitignore
 !.github
 !.dockerignore
-!.gitlab-ci.yml
 !.docker-nix
 
 output
 output-es
 generated-docs
-bower_components
 node_modules
 
 package-lock.json
 *.lock
-
-prod/*
 
 api.json
 
@@ -22,4 +18,4 @@ openapitools.json
 
 src/App/Api/Foreign
 
-dist/app.js
+app/*.js

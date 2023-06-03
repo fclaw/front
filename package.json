@@ -8,7 +8,7 @@
     "spago": "^0.20.9"
   },
   "scripts": {
-    "clean": "rm -rf output-es node_modules output .spago dist/*.js *.lock .cache",
+    "clean": "rm -rf output-es node_modules output .spago app/*.js *.lock .cache",
     "test": "spago test",
     "serve": "node esbuild-serve.mjs",
     "bundle": "./scripts/bundle.sh",

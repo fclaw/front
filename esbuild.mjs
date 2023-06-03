@@ -12,7 +12,7 @@ var startTime = process.hrtime();
 await esbuild.build({
   entryPoints: ['./output/Main/index.js'],
   bundle: true,
-  outfile: 'dist/app.js',
+  outfile: 'app/app.js',
   minify: true
 }).then(_ => { 
     var elapsedSeconds = parseHrtimeToSeconds(process.hrtime(startTime));
