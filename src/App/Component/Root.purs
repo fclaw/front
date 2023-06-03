@@ -18,6 +18,7 @@ import App.Component.Utils (OpaqueSlot)
 import App.Data.Route (Route(..), routeCodec)
 import App.Page.Home as Home
 import App.Page.Contact as Contact
+import App.Page.About as About
 import App.Capability.Navigate
 
 import Data.Either (hush)
@@ -34,6 +35,7 @@ import Routing.Duplex as RD
 import Routing.Hash (getHash)
 import Type.Proxy (Proxy(..))
 import Undefined
+import Halogen.HTML.Properties as HP
 
 data Query a = Navigate Route a
 
@@ -47,6 +49,7 @@ data Action
 type ChildSlots =
   ( home :: OpaqueSlot Unit
   , contact :: OpaqueSlot Unit
+  , about :: OpaqueSlot Unit
   )
 
 component
@@ -81,8 +84,7 @@ render :: forall m
   => Navigate m 
   => State 
   -> H.ComponentHTML Action ChildSlots m
-render { route: Just Home } = 
-  HH.slot_ (Proxy :: _ "home") unit Home.component unit
-render { route: Just Contact } = 
-  HH.slot_ (Proxy :: _ "contact") unit Contact.component unit
+render { route: Just Home } = HH.slot_ (Proxy :: _ "home") unit Home.component unit
+render { route: Just Contact } = HH.slot_ (Proxy :: _ "contact") unit Contact.component unit
+render { route: Just About } = HH.slot_ (Proxy :: _ "about") unit About.component unit
 render _ = HH.div_ [ HH.text "Oh no! That page wasn't found." ]

@@ -30,6 +30,7 @@ import Data.Show
 data Route
   = Home
   | Contact
+  | About
 
 derive instance genericRoute :: Generic Route _
 derive instance eqRoute :: Eq Route
@@ -38,6 +39,7 @@ derive instance ordRoute :: Ord Route
 instance showRoute :: Show Route where
   show Home = "home"
   show Contact = "contact"
+  show About = "about"
 
 -- | Next, we'll define a bidirectional codec for our route parsing. Our single codec will handle
 -- | both parsing browser locations and serializing our data type to a browser location. We'll skip
@@ -49,4 +51,5 @@ routeCodec :: RouteDuplex' Route
 routeCodec = root $ sum
   { "Home": noArgs
   , "Contact": "contact" / noArgs
+  , "About": "about" / noArgs
   }
