@@ -32,6 +32,7 @@ data Route
   | Login
   | Register
   | EmailConfirmation String
+  | ProgressBar
 
 derive instance genericRoute :: Generic Route _
 derive instance eqRoute :: Eq Route
@@ -42,6 +43,7 @@ instance showRoute :: Show Route where
   show Login = "profile/login"
   show Register = "profile/register"
   show (EmailConfirmation s) = "profile/email/confirm?registration_key=" <> s
+  show ProgressBar = "progress-bar"
 
 -- | Next, we'll define a bidirectional codec for our route parsing. Our single codec will handle
 -- | both parsing browser locations and serializing our data type to a browser location. We'll skip
@@ -55,4 +57,5 @@ routeCodec = root $ sum
   , "Login": "login" / noArgs
   , "Register": "register" / noArgs
   , "EmailConfirmation": "email" / "confirm" / param "activation_token"
+  , "ProgressBar": "progress-bar" / noArgs
   }

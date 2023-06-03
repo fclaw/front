@@ -19,7 +19,14 @@ import Effect.Aff.Class
 import Foreign.Object (Object)
 import Data.Maybe
 
-makeRequest :: forall m api resp . MonadAff m =>  Host -> Maybe Credentials -> (ApiClient -> Effect api) -> (api -> AC.EffectFnAff (Object resp)) -> m (Either Error (Object resp))
+makeRequest
+  :: forall m api resp . 
+  MonadAff m => 
+  Host -> 
+  Maybe Credentials -> 
+  (ApiClient -> Effect api) -> 
+  (api -> AC.EffectFnAff (Object resp)) -> 
+  m (Either Error (Object resp))
 makeRequest host cred mkApi runApi = do
  api <- H.liftEffect $ do runFn2 mkApiClient host cred >>= mkApi
  H.liftAff $ try $ AC.fromEffectFnAff $ runApi api

@@ -20,8 +20,6 @@ import Foreign.Object as Obj
 import Data.Newtype
 import Data.Argonaut.Decode.Combinators (getField)
 
-import Undefined
-
 newtype Host = Host String
 
 derive instance newtypeHost :: Newtype Host _

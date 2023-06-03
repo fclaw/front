@@ -15,7 +15,7 @@ let { host, port } = await ctx.serve({ servedir: 'dist', port: 8080, host: "127.
 console.log('\x1b[44m', 'server has been started: ' + 'http://' + host + ':' + port, '\x1b[0m');
 
 // Then start a proxy server on port 3000
-const server = http.createServer((req, res) => {
+http.createServer((req, res) => {
   const options = {
     hostname: host,
     port: port,

@@ -19,6 +19,7 @@ import App.Data.Profile (Profile)
 import App.Data.Route (Route(..), routeCodec)
 import App.Page.Home as Home
 import App.Page.Login as Login
+import App.Page.ProgessBar as ProgessBar
 import App.Page.Register.Component as Register
 import App.Capability.Navigate
 import App.Capability.LogMessages as Log
@@ -56,6 +57,7 @@ type ChildSlots =
   ( home :: OpaqueSlot Unit
   , login :: OpaqueSlot Unit
   , register :: OpaqueSlot Unit
+  , progessbar :: OpaqueSlot Unit
   )
 
 component
@@ -112,11 +114,21 @@ component = connect (selectEq _.currentUser) $ H.mkComponent
         otherwise -> H.modify_ _ { route = Just dest }
     pure $ Just a
 
-  render :: State -> H.ComponentHTML Action ChildSlots m
-  render { route: Just r } =
-    case r of
-      Home -> HH.slot_ (Proxy :: _ "home") unit Home.component unit
-      Login -> HH.slot_ (Proxy :: _ "login") unit Login.component (Login.Intake { redirect: true } )
-      Register -> HH.slot_ (Proxy :: _ "register") unit Register.component unit
-      EmailConfirmation _ -> undefined
-  render _ = HH.div_ [ HH.text "Oh no! That page wasn't found." ]
+render :: forall m
+  . MonadAff m
+  => MonadStore Store.Action Store.Store m
+  => Now.Now m
+  => Log.LogMessages m
+  => Navigate m 
+  => State 
+  -> H.ComponentHTML Action ChildSlots m
+render { route: Just Home } = 
+  HH.slot_ (Proxy :: _ "home") unit Home.component unit
+render { route: Just Login } = 
+  HH.slot_ (Proxy :: _ "login") unit Login.component (Login.Intake { redirect: true } )
+render { route: Just Register } = 
+  HH.slot_ (Proxy :: _ "register") unit Register.component unit
+render { route: Just ProgressBar } = 
+  HH.slot_ (Proxy :: _ "progessbar") unit ProgessBar.component unit
+render { route: Just (EmailConfirmation _) } = undefined
+render _ = HH.div_ [ HH.text "Oh no! That page wasn't found." ]

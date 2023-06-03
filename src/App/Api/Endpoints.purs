@@ -32,7 +32,6 @@ foreign import getCredentialsBasicAuth :: Fn1 (Object ResponseBasicAuth) Credent
 
 foreign import mkFrontApi :: Fn1 ApiClient (Effect FrontApi)
 
-
 foreign import putFrontendLog :: forall a .  Fn2 RequestFrontendLog FrontApi (AC.EffectFnAff (Object (Response a)))
 foreign import constructFrontendLog :: Fn2 String String (Effect RequestFrontendLog)
 
@@ -42,3 +41,8 @@ foreign import getDataFromResponse :: forall a . Fn1 (Object (Response a)) (Effe
 foreign import mkFileApi :: Fn1 ApiClient (Effect FileApi)
 
 foreign import sendFiles :: Fn3 String (Array File) FileApi (AC.EffectFnAff (Object (Response (Array Int))))
+
+type Telegram = { host :: String, bot :: String, channel :: String }
+
+foreign import sendMsgToTelegram :: Fn2 Telegram String (AC.EffectFnAff Foreign)
+

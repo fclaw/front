@@ -51,3 +51,5 @@ export const getDataFromResponse = json => () => { e.Response.validateJSON(json)
 export const mkFileApi = client => { return function () { return new e.FileApi(client); } }
 
 export const sendFiles = function(bucket, files, api) { return function (onError, onOk) { api.apiFileBucketPut(bucket, files).then(onOk).catch(onError) }; }
+
+export const sendMsgToTelegram = function(config, body) { return function (onError, onOk) {} }
