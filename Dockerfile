@@ -34,11 +34,11 @@ RUN . /home/nix/.nix-profile/etc/profile.d/nix.sh && \
 
 FROM base as main
 
-WORKDIR /app
+WORKDIR /front
 
-COPY --from=front-build --chown=nix:nix /build/dist /app/dist
-COPY --from=front-build --chown=nix:nix /build/node_modules /app/node_modules
-COPY --from=front-build --chown=nix:nix /build/output /app/output
-COPY --from=front-build --chown=nix:nix /build/nix/prod.nix /build/deploy /build/index.js /build/config.json /build/*.mjs /build/package.json /app/
+COPY --from=front-build --chown=nix:nix /build/dist /front/dist
+COPY --from=front-build --chown=nix:nix /build/node_modules /front/node_modules
+COPY --from=front-build --chown=nix:nix /build/output /front/output
+COPY --from=front-build --chown=nix:nix /build/nix/prod.nix /build/deploy /build/index.js /build/config.json /build/*.mjs /build/package.json /front/
 
-ENTRYPOINT ["/app/init.sh"]
+ENTRYPOINT ["/front/init.sh"]
