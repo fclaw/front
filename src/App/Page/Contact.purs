@@ -1,4 +1,4 @@
-module App.Page.Home ( component ) where
+module App.Page.Contact ( component ) where
 
 import Prelude
 
@@ -12,4 +12,4 @@ component =
     , eval: H.mkEval H.defaultEval
     }
   
-render = HH.div_ [ HH.text "home"]
+render = HH.div_ [ HH.text "contact form"]

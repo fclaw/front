@@ -5,7 +5,6 @@ import Prelude (Unit, bind, ($), void, when, (/=), pure, discard, (>>=))
 import App.Data.Route (routeCodec)
 import App.Component.Root as Root
 import App.Data.Config as Cfg
-import App.Data.Profile as P
 
 import Effect (Effect)
 import Halogen.Aff as HA
@@ -17,7 +16,6 @@ import Halogen (liftEffect)
 import Halogen as H
 import Halogen.Aff as HA
 import Halogen.VDom.Driver (runUI)
-import Store as S
 import AppM as AppM
 import Data.Unit
 import Routing.Hash (matchesWith)
@@ -38,20 +36,6 @@ main config =
     -- reference to the <body> tag as soon as it exists.
     body <- HA.awaitBody
 
-    -- We have two of the three fields we need to create our central state. The
-    -- third field is the current user profile. We'll try to retrieve it in a few steps.
-    -- First, we'll use `readToken` to read an authentication token out of local
-    -- storage. If we can read one, we'll use it to try and get a new user (which
-    -- will fail if the token isn't valid).
-    currentUser :: Maybe P.Profile <- liftEffect S.readToken >>= loadUser
-
-    -- We now have the three pieces of information necessary to configure our app. Let's create
-    -- a record that matches the `Store` type our application requires by filling in these three
-    -- fields. If our environment type ever changes, we'll get a compiler error here.
-    let
-      initialStore :: S.Store
-      initialStore = { config, currentUser }
-
     -- With our app environment ready to go, we can prepare the router to run as our root component.
     --
     -- But wait! Our router is configured to run in a monad that supports all our capabilities like
@@ -61,7 +45,7 @@ main config =
     -- But Halogen only knows how to run components in the `Aff` (asynchronous effects) monad. `Aff`
     -- has no idea how to interpret our capabilities. We need a way to change our router component so
     -- that it runs in `Aff` instead of `AppM`. We can do that with `runAppM`:
-    rootComponent <- AppM.runAppM initialStore Root.component
+    rootComponent <- AppM.runAppM Root.component
 
     -- Now we have the two things we need to run a Halogen application: a reference to an HTML element
     -- and the component to run there.
@@ -93,7 +77,3 @@ main config =
     -- https://github.com/natefaubion/purescript-routing-duplex/blob/v0.2.0/README.md
     void $ liftEffect $ matchesWith (parse routeCodec) \old new ->
       when (old /= Just new) $ launchAff_ $ void $ halogenIO.query $ H.mkTell $ Root.Navigate new
-
-
-loadUser :: Maybe S.Token -> Aff (Maybe P.Profile)
-loadUser token = for token \(_ :: S.Token) -> undefined

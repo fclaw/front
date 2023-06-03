@@ -29,10 +29,7 @@ import Data.Show
 -- | to send users to non-existent routes.
 data Route
   = Home
-  | Login
-  | Register
-  | EmailConfirmation String
-  | ProgressBar
+  | Contact
 
 derive instance genericRoute :: Generic Route _
 derive instance eqRoute :: Eq Route
@@ -40,10 +37,7 @@ derive instance ordRoute :: Ord Route
 
 instance showRoute :: Show Route where
   show Home = "home"
-  show Login = "profile/login"
-  show Register = "profile/register"
-  show (EmailConfirmation s) = "profile/email/confirm?registration_key=" <> s
-  show ProgressBar = "progress-bar"
+  show Contact = "contact"
 
 -- | Next, we'll define a bidirectional codec for our route parsing. Our single codec will handle
 -- | both parsing browser locations and serializing our data type to a browser location. We'll skip
@@ -54,8 +48,5 @@ instance showRoute :: Show Route where
 routeCodec :: RouteDuplex' Route
 routeCodec = root $ sum
   { "Home": noArgs
-  , "Login": "login" / noArgs
-  , "Register": "register" / noArgs
-  , "EmailConfirmation": "email" / "confirm" / param "activation_token"
-  , "ProgressBar": "progress-bar" / noArgs
+  , "Contact": "contact" / noArgs
   }

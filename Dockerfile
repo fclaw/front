@@ -30,7 +30,7 @@ COPY --chown=nix:nix . .
 
 RUN . /home/nix/.nix-profile/etc/profile.d/nix.sh && \ 
       nix-env -i purescript && \
-      nix-shell ./nix/build.nix --log-format bar-with-logs --command "npm install && npm run generate_api -- https://523f-78-180-9-98.ngrok-free.app/swagger.json && npm run bundle"
+      nix-shell ./nix/build.nix --log-format bar-with-logs --command "npm install && npm run bundle"
 
 FROM base as main
 

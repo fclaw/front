@@ -11,8 +11,7 @@
     "clean": "rm -rf output-es node_modules output .spago app/*.js *.lock .cache",
     "test": "spago test",
     "serve": "node esbuild-serve.mjs",
-    "bundle": "./scripts/bundle.sh",
-    "generate_api": "./scripts/generate_api.sh"
+    "bundle": "./scripts/bundle.sh"
   },
   "dependencies": {
     "purs-tidy": "^0.9.3",
