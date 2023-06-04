@@ -34,6 +34,8 @@ RUN . /home/nix/.nix-profile/etc/profile.d/nix.sh && \
 
 FROM base as main
 
+EXPOSE 3000/tcp
+
 WORKDIR /front
 
 COPY --from=front-build --chown=nix:nix /build/app /front/app
