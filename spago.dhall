@@ -32,6 +32,8 @@
   , "functions"
   , "now" 
   , "tuples"
+  , "web-events"
+  , "web-uievents"
   ]
 , packages = ./packages.dhall
 , sources = [ "src/**/*.purs", "test/**/*.purs" ]
