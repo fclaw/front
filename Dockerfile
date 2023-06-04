@@ -34,7 +34,7 @@ RUN . /home/nix/.nix-profile/etc/profile.d/nix.sh && \
 
 FROM base as main
 
-EXPOSE 8080/tcp
+EXPOSE 3000/tcp
 
 WORKDIR /front
 

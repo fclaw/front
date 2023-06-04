@@ -31,4 +31,4 @@ http.createServer((req, res) => {
 
   // Forward the body of the request to esbuild
   req.pipe(proxyReq, { end: true });
-}).listen(8080);
+}).listen(3000);
