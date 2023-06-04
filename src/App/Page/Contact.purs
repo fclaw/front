@@ -41,9 +41,6 @@ component =
     handleAction (Submit ev) = do
       liftEffect $ preventDefault ev
       { email, content, err } <- H.get
-      liftEffect $ logShow email
-      liftEffect $ logShow content
-      liftEffect $ logShow err
       let validate Nothing (Just _) = Nothing
           validate (Just _) Nothing =  Nothing
           validate Nothing Nothing = Nothing
@@ -77,7 +74,7 @@ render { isOk: true } =
     [
       HH.span [mkClass "nav__logo"] [HH.a [mkClass "link--background-grey", safeHref Home] [HH.text "Sergey Yakovlev"]]
     ]
-  , HH.div [mkClass "content withMargin", ] [ HH.text "thank you!!"]
+  , HH.div [mkClass "content withMargin"] [ HH.text "thank you!!"]
   ]
 render { email, content, err } = 
   HH.div_ 
