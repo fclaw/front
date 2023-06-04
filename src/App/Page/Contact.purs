@@ -20,22 +20,9 @@ import Affjax.ResponseFormat as AX
 import Affjax.RequestBody as AXB
 import Data.FormURLEncoded as AXD
 import Data.Tuple
+import Data.String.CodePoints
 
-import Undefined
-
--- -976591093
-
--- let url_msg = telegramHost <> telegramBot <> "/sendMessage"
---         let
---           body =
---             AXB.FormURLEncoded $
---               AXD.FormURLEncoded
---                 [ Tuple "chat_id" (pure telegramChat)
---                 , Tuple "text" (pure ("`" <> message log <> "`"))
---                 , Tuple "parse_mode" (pure "markdown")
---                 ]
---         catchError 
---           (do void $ H.liftAff $ AX.post AX.json url_msg (pure body)
+import Effect.Console
 
 
 type State = { email :: Maybe String, content :: Maybe String, err :: Boolean, isOk :: Boolean }
@@ -53,25 +40,37 @@ component =
     handleAction (Content body) = H.modify_ \s -> s { content = pure body }
     handleAction (Submit ev) = do
       liftEffect $ preventDefault ev
-      { email, content } <- H.get
-      let url = "https://api.telegram.org/bot2096396660:AAFgPJkIGmBOgbWuzvyejPJJo7-HpFgr2CY/sendMessage"
-      let body =
-            AXB.FormURLEncoded $
-              AXD.FormURLEncoded
-                [ Tuple "chat_id" (pure "-976591093")
-                , Tuple "text" (pure ("`" <> "from: " <> fromMaybe mempty email <> ", body: " <> fromMaybe mempty content <> "`"))
-                , Tuple "parse_mode" (pure "markdown")
-                ]
-      res <- H.liftAff $ try $ AX.post AX.json url (pure body)
-      case res of 
-        Right _ -> pure unit
-        Left _ -> H.modify_ \s -> s { isOk = false }
+      { email, content, err } <- H.get
+      liftEffect $ logShow email
+      liftEffect $ logShow content
+      liftEffect $ logShow err
+      let validate Nothing (Just _) = Nothing
+          validate (Just _) Nothing =  Nothing
+          validate Nothing Nothing = Nothing
+          validate (Just x) (Just y) 
+            | length x == 0 || length y == 0 = Nothing
+            | otherwise = Just $ Tuple x y
+      case validate email content of 
+        Just (Tuple email content) -> do 
+          let url = "https://api.telegram.org/bot2096396660:AAFgPJkIGmBOgbWuzvyejPJJo7-HpFgr2CY/sendMessage"
+          let body =
+                AXB.FormURLEncoded $
+                  AXD.FormURLEncoded
+                    [ Tuple "chat_id" (pure "-976591093")
+                    , Tuple "text" (pure ("`" <> "from: " <> email <> ", body: " <> content <> "`"))
+                    , Tuple "parse_mode" (pure "markdown")
+                    ]
+          res <- H.liftAff $ try $ AX.post AX.json url (pure body)
+          case res of 
+            Right _ -> pure unit
+            Left _ -> H.modify_ \s -> s { isOk = false, err = false }
+        Nothing -> H.modify_ \s -> s { err = true }
   
 mkClass = HP.class_ <<< HH.ClassName
 
 safeHref = HP.href <<< append "#" <<< print routeCodec
 
-render _ = 
+render { email, content, err } = 
   HH.div_ 
   [
     HH.nav [mkClass "nav nav--border-top"] 
@@ -87,13 +86,13 @@ render _ =
           [ HH.input  
             [ HP.placeholder "Email"
               , HP.type_ HP.InputEmail 
-              , mkClass "form-control"
+              , mkClass (if (isNothing email || (isJust email && map length email == Just 0)) && err then "form-control is-invalid" else "form-control")
               , HE.onValueInput Email
             ]
           ] 
           , HH.div [mkClass "form-group"] 
             [ HH.textarea
-             [  mkClass "form-control"
+             [  mkClass (if (isNothing content || (isJust content && map length content == Just 0)) && err then "form-control is-invalid" else "form-control")
              , HP.rows 20
              , HE.onValueInput Content
              ]
