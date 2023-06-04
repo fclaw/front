@@ -38,13 +38,13 @@ import Undefined
 --           (do void $ H.liftAff $ AX.post AX.json url_msg (pure body)
 
 
-type State = { email :: Maybe String, content :: Maybe String, err :: Boolean }
+type State = { email :: Maybe String, content :: Maybe String, err :: Boolean, isOk :: Boolean }
 
 data Action = Email String | Content String | Submit Event
 
 component =
   H.mkComponent
-    { initialState: const { email: Nothing, content: Nothing, err: false }
+    { initialState: const { email: Nothing, content: Nothing, err: false, isOk: true }
     , render: render
     , eval: H.mkEval H.defaultEval { handleAction = handleAction }
     }
@@ -62,7 +62,10 @@ component =
                 , Tuple "text" (pure ("`" <> "from: " <> fromMaybe mempty email <> ", body: " <> fromMaybe mempty content <> "`"))
                 , Tuple "parse_mode" (pure "markdown")
                 ]
-      void $ H.liftAff $ AX.post AX.json url (pure body)
+      res <- H.liftAff $ try $ AX.post AX.json url (pure body)
+      case res of 
+        Right _ -> pure unit
+        Left _ -> H.modify_ \s -> s { isOk = false }
   
 mkClass = HP.class_ <<< HH.ClassName
 
