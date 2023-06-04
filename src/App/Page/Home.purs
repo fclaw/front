@@ -36,7 +36,6 @@ import Effect.Console
 import App.Data.Config
 import Data.Newtype (unwrap)
 
-
 data ParentAction = GetState
 
 component =
@@ -63,14 +62,14 @@ systemInfo =
       }
     }
   where
-    handleAction Initialize = do 
+    handleAction Initialize = do
       { config: { wsUrl } } <- getStore
       void $ H.subscribe =<< getMsg wsUrl Recieve
     handleAction (Recieve new) =
       H.modify_ \s ->  s { msg = new } 
 
 getMsg :: forall m a b c . Bind m => MonadEffect m => MonadAff m => MonadRec m => WSUrl -> (a -> b) -> m (HS.Emitter b)
-getMsg url go = do 
+getMsg url go = do
  { emitter, listener } <- H.liftEffect HS.create
  ws <- H.liftEffect $ runFn2 WS.createWebSocket (unwrap url <> "/api/public/server/info") []
  let isOpen = do 
