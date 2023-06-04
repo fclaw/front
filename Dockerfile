@@ -38,7 +38,7 @@ EXPOSE 8080/tcp
 
 WORKDIR /front
 
-COPY --from=front-build --chown=nix:nix /build/dist /front/dist
+COPY --from=front-build --chown=nix:nix /build/app /front/app
 COPY --from=front-build --chown=nix:nix /build/node_modules /front/node_modules
 COPY --from=front-build --chown=nix:nix /build/output /front/output
 COPY --from=front-build --chown=nix:nix /build/nix/prod.nix /build/deploy /build/index.js /build/config.json /build/*.mjs /build/package.json /front/

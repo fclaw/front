@@ -44,6 +44,7 @@ jobs:
             ${{ vars.DOCKER_IMAGE }}
           tags: |       
             type=raw,value=${{ github.ref_name }}_${{ github.sha }},enable=${{ github.ref == format('refs/heads/{0}', github.ref_name) }}
+            type=raw,value=latest
                 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4.0.0
