@@ -31,7 +31,7 @@ data Action = Email String | Content String | Submit Event
 
 component =
   H.mkComponent
-    { initialState: const { email: Nothing, content: Nothing, err: false, isOk: true }
+    { initialState: const { email: Nothing, content: Nothing, err: false, isOk: false }
     , render: render
     , eval: H.mkEval H.defaultEval { handleAction = handleAction }
     }
@@ -62,14 +62,23 @@ component =
                     ]
           res <- H.liftAff $ try $ AX.post AX.json url (pure body)
           case res of 
-            Right _ -> pure unit
-            Left _ -> H.modify_ \s -> s { isOk = false, err = false }
+            Right _ -> H.modify_ \s -> s { isOk = true }
+            Left _ -> H.modify_ \s -> s { err = false }
         Nothing -> H.modify_ \s -> s { err = true }
   
 mkClass = HP.class_ <<< HH.ClassName
 
 safeHref = HP.href <<< append "#" <<< print routeCodec
 
+render { isOk: true } =
+ HH.div_ 
+  [
+    HH.nav [mkClass "nav nav--border-top"] 
+    [
+      HH.span [mkClass "nav__logo"] [HH.a [mkClass "link--background-grey", safeHref Home] [HH.text "Sergey Yakovlev"]]
+    ]
+  , HH.div [mkClass "content withMargin", ] [ HH.text "thank you!!"]
+  ]
 render { email, content, err } = 
   HH.div_ 
   [
