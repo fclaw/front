@@ -28,7 +28,7 @@ import App.Api.Utils
 import App.Api.Endpoints (mkFrontApi, putFrontendLog, constructFrontendLog)
 
 import Store as Store
-import Effect.Aff (Aff)
+import Effect.Aff (Aff, catchError)
 import Effect.Aff.Class (class MonadAff)
 import Effect.Class (class MonadEffect, liftEffect)
 import Halogen as H
@@ -46,6 +46,8 @@ import Data.Tuple
 import Effect.Console as C
 import Data.Maybe
 import Data.Function.Uncurried (runFn2)
+import Control.Monad.Error.Class
+import Effect.Exception (Error)
 
 
 -- | In the capability modules (`Conduit.Capability.*`), we wrote some abstract, high-level
@@ -113,6 +115,7 @@ derive newtype instance monadAppM :: Monad AppM
 derive newtype instance monadEffectAppM :: MonadEffect AppM
 derive newtype instance monadAffAppM :: MonadAff AppM
 derive newtype instance monadStoreAppM :: MonadStore Store.Action Store.Store AppM
+derive newtype instance monadErrorAppM :: MonadError Error AppM 
 
 -- | Our app uses hash-based routing, so to navigate from place to place, we'll just set the hash.
 -- | Note how our navigation capability uses our routing data type rather than let you set any
@@ -144,9 +147,11 @@ instance logMessagesAppM :: LogMessages AppM where
                 , Tuple "text" (pure ("`" <> message log <> "`"))
                 , Tuple "parse_mode" (pure "markdown")
                 ]
-        void $ H.liftAff $ AX.post AX.json url_msg (pure body)
-        log <- liftEffect $ runFn2 constructFrontendLog build (message log)
-        void $ makeRequest url Nothing mkFrontApi $ runFn2 putFrontendLog log
+        catchError 
+          (do void $ H.liftAff $ AX.post AX.json url_msg (pure body)
+              log <- liftEffect $ runFn2 constructFrontendLog build (message log)
+              void $ makeRequest url Nothing mkFrontApi $ runFn2 putFrontendLog log)
+          (logError <<< show)
 
 -- | We're finally ready to write concrete implementations for each of our abstract capabilities.
 -- | For an in-depth description of each capability, please refer to the relevant `Capability.*`

@@ -1,6 +1,6 @@
 module Main (main) where
 
-import Prelude (Unit, bind, ($), void, when, (/=), pure, discard, (>>=))
+import Prelude (Unit, bind, ($), void, when, (/=), pure, discard, (>>=), (<<<))
 
 import App.Data.Route (routeCodec)
 import App.Component.Root as Root
@@ -12,7 +12,7 @@ import Halogen.Aff as HA
 import Halogen.VDom.Driver (runUI)
 import Undefined (undefined)
 import Data.Maybe
-import Effect.Aff (launchAff_, Aff)
+import Effect.Aff (launchAff_, Aff, catchError)
 import Halogen (liftEffect)
 import Halogen as H
 import Halogen.Aff as HA
@@ -23,6 +23,7 @@ import Data.Unit
 import Routing.Hash (matchesWith)
 import Routing.Duplex (parse)
 import Data.Traversable (for)
+import Data.Functor
 
 import Effect.Console
 
@@ -92,8 +93,8 @@ main config =
     -- https://github.com/slamdata/purescript-routing/blob/v8.0.0/GUIDE.md
     -- https://github.com/natefaubion/purescript-routing-duplex/blob/v0.2.0/README.md
     void $ liftEffect $ matchesWith (parse routeCodec) \old new ->
-      when (old /= Just new) $ launchAff_ $ void $ halogenIO.query $ H.mkTell $ Root.Navigate new
-
+      when (old /= Just new) $ launchAff_ $
+        catchError (void (halogenIO.query (H.mkTell (Root.Navigate new)))) (liftEffect <<< logShow)
 
 loadUser :: Maybe S.Token -> Aff (Maybe P.Profile)
 loadUser token = for token \(_ :: S.Token) -> undefined
