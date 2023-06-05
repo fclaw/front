@@ -53,13 +53,13 @@ mkClass = HP.class_ <<< HH.ClassName
 
 safeHref = HP.href <<< append "#" <<< print routeCodec
 
-render { body}  = 
+render { body } = 
   HH.div [mkClass "home"] 
   [ HH.h1 [mkClass "home__title"] [HH.text "Sergey Yakovlev"]
   , HH.p [mkClass "home_summary"] 
     [ HH.text body
     , HH.span [mkClass "home__links"] 
-      [ HH.a [mkClass "link--background-grey", safeHref About] [HH.text "about you"]
+      [ HH.a [mkClass "link--background-grey", safeHref About] [HH.text "expectations"]
       , HH.a [mkClass "link--background-grey", safeHref Contact] [HH.text "contact me"]
       , HH.a [mkClass "link__external link--background-grey", HP.href "https://github.com/fclaw"] [HH.text "github"]
       ]

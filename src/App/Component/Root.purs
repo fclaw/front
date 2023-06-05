@@ -92,6 +92,6 @@ render :: forall m
   -> H.ComponentHTML Action ChildSlots m
 render { route: Just Home, ref } = HH.slot_ (Proxy :: _ "home") unit (Home.component ref) unit
 render { route: Just Contact } = HH.slot_ (Proxy :: _ "contact") unit Contact.component unit
-render { route: Just About } = HH.slot_ (Proxy :: _ "about") unit About.component unit
+render { route: Just About, ref } = HH.slot_ (Proxy :: _ "about") unit (About.component ref) unit
 render { route: Just Error, ref } = HH.slot_ (Proxy :: _ "error") unit (Error.component ref) unit
 render _ = HH.div_ [ HH.text "Oh no! That page wasn't found." ]
