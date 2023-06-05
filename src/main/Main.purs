@@ -21,6 +21,7 @@ import Data.Unit
 import Routing.Hash (matchesWith)
 import Routing.Duplex (parse)
 import Data.Traversable (for)
+import Effect.Ref as Ref
 
 import Effect.Console
 
@@ -36,6 +37,8 @@ main config =
     -- reference to the <body> tag as soon as it exists.
     body <- HA.awaitBody
 
+    error_ref <- liftEffect $ Ref.new Nothing  
+
     -- With our app environment ready to go, we can prepare the router to run as our root component.
     --
     -- But wait! Our router is configured to run in a monad that supports all our capabilities like
@@ -45,7 +48,7 @@ main config =
     -- But Halogen only knows how to run components in the `Aff` (asynchronous effects) monad. `Aff`
     -- has no idea how to interpret our capabilities. We need a way to change our router component so
     -- that it runs in `Aff` instead of `AppM`. We can do that with `runAppM`:
-    rootComponent <- AppM.runAppM Root.component
+    rootComponent <- AppM.runAppM $ Root.component error_ref
 
     -- Now we have the two things we need to run a Halogen application: a reference to an HTML element
     -- and the component to run there.

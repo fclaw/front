@@ -31,6 +31,7 @@ data Route
   = Home
   | Contact
   | About
+  | Error
 
 derive instance genericRoute :: Generic Route _
 derive instance eqRoute :: Eq Route
@@ -40,6 +41,7 @@ instance showRoute :: Show Route where
   show Home = "home"
   show Contact = "contact"
   show About = "about"
+  show Error = "error"
 
 -- | Next, we'll define a bidirectional codec for our route parsing. Our single codec will handle
 -- | both parsing browser locations and serializing our data type to a browser location. We'll skip
@@ -50,6 +52,7 @@ instance showRoute :: Show Route where
 routeCodec :: RouteDuplex' Route
 routeCodec = root $ sum
   { "Home": noArgs
+  , "Error": "error" / noArgs
   , "Contact": "contact" / noArgs
   , "About": "about" / noArgs
   }

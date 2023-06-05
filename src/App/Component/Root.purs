@@ -19,6 +19,7 @@ import App.Data.Route (Route(..), routeCodec)
 import App.Page.Home as Home
 import App.Page.Contact as Contact
 import App.Page.About as About
+import App.Page.Error as Error
 import App.Capability.Navigate
 
 import Data.Either (hush)
@@ -36,11 +37,14 @@ import Routing.Hash (getHash)
 import Type.Proxy (Proxy(..))
 import Undefined
 import Halogen.HTML.Properties as HP
+import Effect.Ref as Ref
+import Affjax (Response)
 
 data Query a = Navigate Route a
 
 type State =
   { route :: Maybe Route
+  , ref :: Ref.Ref (Maybe (Response String))
   }
 
 data Action
@@ -50,15 +54,17 @@ type ChildSlots =
   ( home :: OpaqueSlot Unit
   , contact :: OpaqueSlot Unit
   , about :: OpaqueSlot Unit
+  , error :: OpaqueSlot Unit
   )
 
 component
   :: forall m
    . MonadAff m
   => Navigate m
-  => H.Component Query Unit Void m
-component = H.mkComponent
-  { initialState: const { route: Nothing }
+  => Ref.Ref (Maybe (Response String))
+  -> H.Component Query Unit Void m
+component ref = H.mkComponent
+  { initialState: const { route: Nothing, ref: ref }
   , render
   , eval: H.mkEval $ H.defaultEval
       { handleQuery = handleQuery
@@ -82,9 +88,10 @@ component = H.mkComponent
 render :: forall m
   . MonadAff m
   => Navigate m 
-  => State 
+  => State
   -> H.ComponentHTML Action ChildSlots m
-render { route: Just Home } = HH.slot_ (Proxy :: _ "home") unit Home.component unit
+render { route: Just Home, ref } = HH.slot_ (Proxy :: _ "home") unit (Home.component ref) unit
 render { route: Just Contact } = HH.slot_ (Proxy :: _ "contact") unit Contact.component unit
 render { route: Just About } = HH.slot_ (Proxy :: _ "about") unit About.component unit
+render { route: Just Error, ref } = HH.slot_ (Proxy :: _ "error") unit (Error.component ref) unit
 render _ = HH.div_ [ HH.text "Oh no! That page wasn't found." ]
